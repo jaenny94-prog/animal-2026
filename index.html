@@ -6,6 +6,8 @@
   <title>동물 복지 탐구 & 공존 단편영화 제작 워크스튜디오</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- html2pdf.js for Direct PDF Download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Google Fonts (Gaegu & Noto Sans KR for kid-friendly warm aesthetic) -->
@@ -99,7 +101,7 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-xl sm:text-2xl font-black text-emerald-800 tracking-tight">공존의 렌즈 (Lens of Coexistence)</h1>
-            <span class="text-xs font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">초등 4학년 프로젝트</span>
+            <span class="text-xs font-bold px-2.5 py-0.5 bg-emerald-600 text-white rounded-full shadow-2xs">4학년 3반 프로젝트</span>
           </div>
           <p class="text-xs text-slate-500 font-medium">동물 복지 탐구 보고서 & 단편 영화 스토리보드 스튜디오</p>
         </div>
@@ -107,11 +109,15 @@
 
       <!-- Quick Actions -->
       <div class="flex items-center gap-2">
-        <button onclick="saveAllData(true)" class="px-3.5 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-sm font-bold rounded-xl border border-emerald-200 transition flex items-center gap-1.5 shadow-sm active:scale-95">
+        <button onclick="loadDemoData()" class="px-3 py-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 text-xs sm:text-sm font-bold rounded-xl border border-amber-200 transition flex items-center gap-1.5 shadow-2xs active:scale-95" title="선생님 시연용 예시 데이터 채우기">
+          <i class="fa-solid fa-wand-sparkles"></i>
+          <span class="hidden sm:inline">예시 채우기</span>
+        </button>
+        <button onclick="saveAllData(true)" class="px-3.5 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs sm:text-sm font-bold rounded-xl border border-emerald-200 transition flex items-center gap-1.5 shadow-2xs active:scale-95">
           <i class="fa-solid fa-cloud-arrow-up"></i>
           <span>임시저장</span>
         </button>
-        <button onclick="resetAllDataConfirm()" class="px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 text-sm font-semibold rounded-xl border border-rose-200 transition active:scale-95" title="모두 비우기">
+        <button onclick="openResetModal()" class="px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 text-sm font-semibold rounded-xl border border-rose-200 transition active:scale-95" title="모두 비우기">
           <i class="fa-solid fa-rotate-left"></i>
         </button>
       </div>
@@ -133,7 +139,7 @@
       </button>
       <button onclick="switchTab(4)" id="tabBtn4" class="tab-btn px-4 py-2 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap transition bg-white text-slate-600 hover:bg-slate-100">
         <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs">4</span>
-        <span>최종 포트폴리오 & 인쇄</span>
+        <span>PDF 저장 & 4-3 패들렛 제출</span>
       </button>
     </nav>
   </header>
@@ -175,7 +181,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
               <div>
                 <label class="block text-xs font-bold text-slate-600 mb-1">우리 모둠 이름</label>
-                <input type="text" id="repGroup" placeholder="예: 4학년 2반 3모둠 (초록발자국)" class="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 focus:ring-2 focus:ring-emerald-400 outline-none">
+                <input type="text" id="repGroup" placeholder="예: 4학년 3반 2모둠 (초록발자국)" class="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 focus:ring-2 focus:ring-emerald-400 outline-none">
               </div>
               <div>
                 <label class="block text-xs font-bold text-slate-600 mb-1">탐구 모둠원</label>
@@ -281,7 +287,7 @@
                 <button onclick="quickSearch('돌고래 수족관')" class="text-xs bg-emerald-700/70 hover:bg-emerald-600 px-2.5 py-1 rounded-lg border border-emerald-600 transition">🐬 돌고래 수족관</button>
                 <button onclick="quickSearch('로드킬 생태통로')" class="text-xs bg-emerald-700/70 hover:bg-emerald-600 px-2.5 py-1 rounded-lg border border-emerald-600 transition">🦌 로드킬과 생태통로</button>
                 <button onclick="quickSearch('동물실험')" class="text-xs bg-emerald-700/70 hover:bg-emerald-600 px-2.5 py-1 rounded-lg border border-emerald-600 transition">🐰 화장품 동물실험</button>
-                <button onclick="quickSearch('서식지 파괴')" class="text-xs bg-emerald-700/70 hover:bg-emerald-600 px-2.5 py-1 rounded-lg border border-emerald-600 transition">🌲 야생 서식지 파괴</button>
+                <button onclick="quickSearch('기후위기와 북극곰')" class="text-xs bg-emerald-700/70 hover:bg-emerald-600 px-2.5 py-1 rounded-lg border border-emerald-600 transition">🐻‍❄️ 기후위기와 북극곰</button>
               </div>
             </div>
 
@@ -337,189 +343,60 @@
     </section>
 
     <!-- ============================================== -->
-    <!-- TAB 2: 단편 영화 기획 & 시놉시스 -->
-    <!-- ============================================== -->
-    <section id="step2" class="tab-content hidden">
-      <div class="max-w-4xl mx-auto space-y-6">
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-emerald-100 shadow-sm">
-          <div class="border-b border-slate-100 pb-4 mb-6 flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <span class="text-xs font-black tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase">Step 02 Movie Planning</span>
-              <h2 class="text-2xl font-black text-slate-800 mt-1 flex items-center gap-2">
-                <span>우리 모둠 단편 영화 기획서</span>
-                <span class="text-lg">🎬</span>
-              </h2>
-            </div>
-            <p class="text-xs text-slate-500">보고서 내용을 바탕으로 사람들의 마음을 움직일 감동 스토리를 짜봐요!</p>
-          </div>
-
-          <!-- Basic Movie Info -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1.5">영화 제목 (가제)</label>
-              <input type="text" id="movTitle" placeholder="예: 달콤이의 탈출 / 로드킬 없는 숲길을 찾아서" class="w-full text-base font-bold rounded-xl border border-slate-200 px-4 py-2.5 focus:ring-2 focus:ring-emerald-400 outline-none">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1.5">영화 장르 & 분위기</label>
-              <select id="movGenre" class="w-full text-sm rounded-xl border border-slate-200 px-4 py-2.5 focus:ring-2 focus:ring-emerald-400 outline-none bg-white">
-                <option value="감동 드라마">💖 따뜻하고 뭉클한 감동 드라마</option>
-                <option value="동물 다큐멘터리">📹 동물 관찰 탐사 다큐멘터리</option>
-                <option value="판타지/모험">✨ 동물이 말을 하는 판타지 모험극</option>
-                <option value="미스터리/추리">🔍 비밀을 파헤치는 탐정 추리극</option>
-                <option value="애니메이션">🎨 알록달록 스톱모션/애니메이션</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- 핵심 메세지 & 등장인물 -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1.5">관객에게 전하고 싶은 핵심 메시지</label>
-              <textarea id="movMessage" rows="3" placeholder="예: 동물도 우리처럼 기쁨과 고통을 느끼는 소중한 생명입니다. 사지 말고 입양해주세요!" class="w-full text-sm rounded-xl border border-slate-200 p-3 focus:ring-2 focus:ring-emerald-400 outline-none resize-none"></textarea>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1.5">등장인물 & 동물 주인공 소개</label>
-              <textarea id="movCharacters" rows="3" placeholder="예: '보리'(유기견 주인공, 사람을 무서워함), '하은'(길에서 보리를 발견하고 지켜주는 초등학생), '이웃 아저씨' 등" class="w-full text-sm rounded-xl border border-slate-200 p-3 focus:ring-2 focus:ring-emerald-400 outline-none resize-none"></textarea>
-            </div>
-          </div>
-
-          <!-- 4단 구성 줄거리 (기승전결 / 발단-전개-위기-결말) -->
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 mb-6">
-            <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-clapperboard text-emerald-600"></i>
-              <span>단편 영화 스토리 4단계 구성 (발단 - 전개 - 위기/갈등 - 해결/결말)</span>
-            </h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- 1. 시작 -->
-              <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-                <span class="inline-block text-xs font-extrabold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md mb-1.5">1단계: 시작 (발단)</span>
-                <p class="text-xs text-slate-400 mb-1.5">주인공 동물과 배경 소개</p>
-                <textarea id="movPlot1" rows="3" placeholder="예: 숲속에서 엄마와 평화롭게 살고 있던 아기 고라니 '퐁이'가 있었습니다." class="w-full text-xs sm:text-sm rounded-lg border border-slate-200 p-2.5 focus:ring-2 focus:ring-blue-400 outline-none resize-none"></textarea>
-              </div>
-
-              <!-- 2. 사건의 발생 -->
-              <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-                <span class="inline-block text-xs font-extrabold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md mb-1.5">2단계: 사건 (전개)</span>
-                <p class="text-xs text-slate-400 mb-1.5">인간의 행동으로 인해 문제가 일어남</p>
-                <textarea id="movPlot2" rows="3" placeholder="예: 숲 한가운데에 도로가 생기고 큰 트럭들이 쌩쌩 달리면서 엄마와 헤어지게 됩니다." class="w-full text-xs sm:text-sm rounded-lg border border-slate-200 p-2.5 focus:ring-2 focus:ring-amber-400 outline-none resize-none"></textarea>
-              </div>
-
-              <!-- 3. 위기와 갈등 -->
-              <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-                <span class="inline-block text-xs font-extrabold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md mb-1.5">3단계: 위기 (갈등)</span>
-                <p class="text-xs text-slate-400 mb-1.5">동물이 겪는 가장 큰 위험과 슬픔</p>
-                <textarea id="movPlot3" rows="3" placeholder="예: 배가 고파 도로로 뛰어든 퐁이는 자동차 헤드라이트 불빛에 얼어붙어 로드킬 위험에 처합니다." class="w-full text-xs sm:text-sm rounded-lg border border-slate-200 p-2.5 focus:ring-2 focus:ring-rose-400 outline-none resize-none"></textarea>
-              </div>
-
-              <!-- 4. 공존과 결말 -->
-              <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-                <span class="inline-block text-xs font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md mb-1.5">4단계: 결말 (공존)</span>
-                <p class="text-xs text-slate-400 mb-1.5">인간의 반성과 공존을 위한 행동</p>
-                <textarea id="movPlot4" rows="3" placeholder="예: 마을 아이들이 표지판을 달고 어른들이 생태통로를 만들어주어 퐁이가 엄마와 다시 만나 행복하게 뛰어놉니다." class="w-full text-xs sm:text-sm rounded-lg border border-slate-200 p-2.5 focus:ring-2 focus:ring-emerald-400 outline-none resize-none"></textarea>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom Navigation -->
-          <div class="flex items-center justify-between pt-2">
-            <button onclick="switchTab(1)" class="px-4 py-2 text-slate-600 hover:text-slate-900 font-bold text-sm flex items-center gap-1.5">
-              <i class="fa-solid fa-arrow-left"></i>
-              <span>1단계 보고서로</span>
-            </button>
-            <button onclick="saveAllData(); switchTab(3);" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-md transition flex items-center gap-2 text-sm">
-              <span>스토리보드(콘티) 그리러 가기</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================== -->
-    <!-- TAB 3: 영화 콘티(스토리보드) 스케치북 제작기 -->
-    <!-- ============================================== -->
-    <section id="step3" class="tab-content hidden">
-      <div class="space-y-6">
-        <!-- Top Toolbar -->
-        <div class="bg-white rounded-3xl p-5 border-2 border-emerald-100 shadow-sm flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <span class="text-xs font-black tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase">Step 03 Storyboard</span>
-            <h2 class="text-2xl font-black text-slate-800 mt-1 flex items-center gap-2">
-              <span>단편 영화 스토리보드(콘티)</span>
-              <span class="text-lg">🎨</span>
-            </h2>
-            <p class="text-xs text-slate-500 mt-0.5">화면을 직접 스케치하고 대사와 카메라 구도를 적어 실제 촬영 계획을 세워보세요.</p>
-          </div>
-          
-          <div class="flex items-center gap-2">
-            <button onclick="addNewScene()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-sm shadow-md transition flex items-center gap-2 active:scale-95">
-              <i class="fa-solid fa-plus"></i>
-              <span>새 장면(Scene) 추가</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Drawing Instructions Banner -->
-        <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-amber-900 text-xs sm:text-sm flex items-start gap-3">
-          <i class="fa-solid fa-lightbulb text-amber-500 text-lg mt-0.5"></i>
-          <div>
-            <span class="font-bold">스토리보드 꿀팁:</span>
-            마우스나 터치펜, 손가락으로 각 컷의 그림을 쓱쓱 그려보세요! 완벽한 그림이 아니어도 좋아요. 
-            <strong>카메라 구도</strong>(클로즈업: 얼굴 크게 / 풀샷: 전체 풍경)와 <strong>배경음악, 효과음(쾅!, 새소리 등)</strong>을 적어두면 영화 촬영할 때 큰 도움이 됩니다.
-          </div>
-        </div>
-
-        <!-- Scenes List Container -->
-        <div id="scenesContainer" class="space-y-6">
-          <!-- Dynamically Rendered Scenes -->
-        </div>
-
-        <!-- Bottom Navigation -->
-        <div class="flex items-center justify-between pt-4">
-          <button onclick="switchTab(2)" class="px-4 py-2 text-slate-600 hover:text-slate-900 font-bold text-sm flex items-center gap-1.5">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span>2단계 기획서로</span>
-          </button>
-          <button onclick="saveAllData(); switchTab(4);" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black shadow-md transition flex items-center gap-2 text-sm">
-            <span>최종 포트폴리오 확인 & 인쇄하기</span>
-            <i class="fa-solid fa-award"></i>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================== -->
-    <!-- TAB 4: 최종 포트폴리오 & 인쇄/내보내기 -->
+    <!-- TAB 4: 최종 포트폴리오 & PDF 저장 / 4-3 패들렛 제출 -->
     <!-- ============================================== -->
     <section id="step4" class="tab-content hidden">
       <div class="space-y-6">
-        <!-- Print Header & Controls -->
-        <div class="bg-white rounded-3xl p-5 border-2 border-emerald-100 shadow-sm flex flex-wrap items-center justify-between gap-4 no-print">
-          <div>
-            <span class="text-xs font-black tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase">Step 04 Final Output</span>
-            <h2 class="text-2xl font-black text-slate-800 mt-1 flex items-center gap-2">
-              <span>동물 복지 프로젝트 최종 포트폴리오</span>
-              <span class="text-lg">🏆</span>
-            </h2>
-            <p class="text-xs text-slate-500 mt-0.5">우리 모둠이 작성한 조사 보고서와 영화 콘티가 하나의 멋진 작품집으로 정리되었습니다!</p>
+        <!-- Print & Padlet Controls -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-emerald-200 shadow-md no-print space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <span class="text-xs font-black tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-full uppercase">Step 04 Final Submission</span>
+              <h2 class="text-2xl font-black text-slate-800 mt-1 flex items-center gap-2">
+                <span>최종 포트폴리오 & 4학년 3반 패들렛 제출</span>
+                <span class="text-lg">🚀</span>
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">완성된 보고서와 콘티를 PDF 파일로 저장하고, 우리 반 패들렛 게시판에 올려주세요!</p>
+            </div>
           </div>
-          
-          <div class="flex items-center gap-3">
-            <button onclick="window.print()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-sm shadow-md transition flex items-center gap-2 active:scale-95">
-              <i class="fa-solid fa-print"></i>
-              <span>보고서 & 콘티 인쇄하기 (PDF 저장)</span>
+
+          <!-- Action Buttons Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+            <!-- Button 1: Direct PDF Save -->
+            <button onclick="downloadPortfolioPDF(false)" id="btnDownloadPdf" class="px-5 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-sm shadow-md transition flex items-center justify-center gap-2 active:scale-95">
+              <i class="fa-solid fa-file-pdf text-lg"></i>
+              <span>1. PDF 파일로 저장하기</span>
+            </button>
+
+            <!-- Button 2: Open Padlet & Copy Info -->
+            <button onclick="openPadletSubmissionModal()" class="px-5 py-3.5 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-black text-sm shadow-md transition flex items-center justify-center gap-2 active:scale-95">
+              <i class="fa-solid fa-paper-plane text-lg"></i>
+              <span>2. 4학년 3반 패들렛에 올리기</span>
+            </button>
+
+            <!-- Button 3: Combined One-Click Action -->
+            <button onclick="downloadPortfolioPDF(true)" class="px-5 py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white rounded-2xl font-black text-sm shadow-md transition flex items-center justify-center gap-2 active:scale-95">
+              <i class="fa-solid fa-bolt text-amber-300 text-lg"></i>
+              <span>PDF 저장 후 바로 패들렛 열기</span>
+            </button>
+          </div>
+
+          <!-- Fallback Print Link -->
+          <div class="flex items-center justify-between text-xs text-slate-400 pt-1 border-t border-slate-100">
+            <span>💡 파일명: <strong id="previewPdfFileName" class="text-slate-600">[4학년3반_모둠]_동물복지_보고서_및_콘티.pdf</strong></span>
+            <button onclick="window.print()" class="text-slate-500 hover:text-slate-800 underline flex items-center gap-1">
+              <i class="fa-solid fa-print"></i> 일반 인쇄창 열기
             </button>
           </div>
         </div>
 
         <!-- Print-Ready Portfolio Sheet Area -->
-        <div id="printArea" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-md space-y-10">
+        <div id="printArea" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-md space-y-8">
 
           <!-- 1. 표지 및 개요 -->
           <div class="border-b-2 border-emerald-600 pb-6 text-center space-y-2">
             <div class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-black rounded-full mb-1">
-              초등학교 동물 복지 & 공존 단편 영화 프로젝트
+              4학년 3반 동물 복지 & 공존 단편 영화 프로젝트
             </div>
             <h1 id="outMovTitle" class="text-3xl sm:text-4xl font-black text-slate-900">단편 영화 제목</h1>
             <p id="outMeta" class="text-sm font-semibold text-slate-600 mt-2">
@@ -619,11 +496,99 @@
 
   <!-- Footer -->
   <footer class="bg-white border-t border-slate-200 py-4 mt-12 no-print text-center text-xs text-slate-500">
-    <p>공존의 렌즈 — 초등학교 동물 복지 탐구 & 모둠 단편 영화 제작 학습 스튜디오</p>
+    <p>공존의 렌즈 — 4학년 3반 동물 복지 탐구 & 모둠 단편 영화 제작 학습 스튜디오</p>
   </footer>
+
+  <!-- Padlet Submission Guide Modal -->
+  <div id="padletModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border-2 border-pink-200 space-y-5 animate-fade-in">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center text-2xl shadow-inner">
+            📌
+          </div>
+          <div>
+            <span class="text-xs font-black text-pink-600 bg-pink-50 px-2 py-0.5 rounded-full">4학년 3반 패들렛 제출 안내</span>
+            <h3 class="text-xl font-black text-slate-800 mt-0.5">패들렛에 우리 모둠 작품 올리기</h3>
+          </div>
+        </div>
+        <button onclick="closePadletModal()" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-xl hover:bg-slate-100">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Auto-copied post preview -->
+      <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-1.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-emerald-700 flex items-center gap-1">
+            <i class="fa-solid fa-check-circle"></i> 패들렛 게시글 제목과 요약이 자동 복사되었어요!
+          </span>
+          <button onclick="copyPadletText()" class="text-xs bg-white border border-slate-300 hover:bg-slate-100 px-2 py-0.5 rounded-lg font-bold text-slate-700">
+            다시 복사
+          </button>
+        </div>
+        <textarea id="padletCopyPreview" readonly rows="3" class="w-full text-xs bg-white border border-slate-200 rounded-xl p-2 text-slate-700 outline-none resize-none"></textarea>
+      </div>
+
+      <!-- 3-Step Kid-Friendly Guide -->
+      <div class="space-y-2.5 text-xs sm:text-sm">
+        <div class="flex items-start gap-3 p-3 rounded-2xl bg-emerald-50/70 border border-emerald-100">
+          <span class="w-6 h-6 rounded-full bg-emerald-600 text-white font-black flex items-center justify-center shrink-0 text-xs">1</span>
+          <div>
+            <p class="font-bold text-emerald-950">다운로드 폴더에서 PDF 파일 확인하기</p>
+            <p class="text-xs text-emerald-800 mt-0.5">방금 저장된 <strong id="modalPdfName" class="underline">PDF 파일</strong>이 컴퓨터/태블릿 '다운로드' 폴더에 있는지 확인해요.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 p-3 rounded-2xl bg-pink-50/70 border border-pink-100">
+          <span class="w-6 h-6 rounded-full bg-pink-600 text-white font-black flex items-center justify-center shrink-0 text-xs">2</span>
+          <div>
+            <p class="font-bold text-pink-950">4학년 3반 패들렛 열고 오른쪽 아래 [+] 누르기</p>
+            <p class="text-xs text-pink-800 mt-0.5">제목 칸에 <strong>붙여넣기(Ctrl+V)</strong>를 누르면 모둠 이름과 영화 제목이 자동으로 입력돼요!</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 p-3 rounded-2xl bg-amber-50/70 border border-amber-100">
+          <span class="w-6 h-6 rounded-full bg-amber-500 text-white font-black flex items-center justify-center shrink-0 text-xs">3</span>
+          <div>
+            <p class="font-bold text-amber-950">파일 업로드 아이콘(⬆️) 눌러서 PDF 첨부하기</p>
+            <p class="text-xs text-amber-800 mt-0.5">저장한 PDF 파일을 선택하고 <strong>[발행]</strong> 버튼을 누르면 제출 완료!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-2.5 pt-2">
+        <a href="https://padlet.com/jaenny94/padlet-s025esmtl5b6hwv738r4" target="_blank" rel="noopener noreferrer" onclick="showToast('4학년 3반 패들렛 새 창이 열렸습니다!')" class="flex-1 py-3 px-4 bg-pink-600 hover:bg-pink-700 text-white font-black rounded-2xl text-center text-sm shadow-md transition flex items-center justify-center gap-2">
+          <span>4학년 3반 패들렛 바로 열기</span>
+          <i class="fa-solid fa-up-right-from-square"></i>
+        </a>
+        <button onclick="closePadletModal()" class="py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-2xl text-sm transition">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Reset Confirmation Modal (No window.confirm used) -->
+  <div id="resetModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border-2 border-rose-100 text-center space-y-4">
+      <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto text-xl">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h3 class="text-lg font-black text-slate-800">모든 내용을 새로 시작할까요?</h3>
+      <p class="text-xs text-slate-500 leading-relaxed">지금까지 작성한 보고서, 영화 기획, 콘티 그림이 모두 지워집니다.</p>
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeResetModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm">취소</button>
+        <button onclick="confirmResetAll()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-sm">모두 지우기</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Application Logic -->
   <script>
+    const PADLET_URL = "https://padlet.com/jaenny94/padlet-s025esmtl5b6hwv738r4";
+
     /* ==============================================================
        1. VIRTUAL KID-SAFE AI & NEWS DATABASE (동물복지 맞춤형 데이터베이스)
        ============================================================== */
@@ -735,27 +700,56 @@
             content: "소 방목지와 사료용 콩밭을 만들기 위해 열대우림이 불타며 재규어와 수많은 희귀 동물들이 멸종 위기에 처해 있습니다."
           }
         ]
+      },
+      '기후위기와 북극곰': {
+        insight: "지구 온난화로 북극의 빙하가 빠르게 녹으면서 북극곰들이 물범을 사냥할 땅과 쉴 곳을 잃어가고 있습니다. 쓰레기 줄이기와 에너지 절약이 북극곰을 지키는 첫걸음입니다.",
+        hint: "작아진 얼음 조각 위에 서 있는 아기 북극곰과 우리 교실의 에어컨 온도 조절 장면을 교차 편집해보세요.",
+        articles: [
+          {
+            title: "얼음이 녹아 수영만 하다 지친 북극곰... 2050년엔 사라질 위기",
+            source: "어린이 기후뉴스",
+            date: "2026.07.14",
+            content: "북극의 바닷얼음이 예년보다 한 달 이상 일찍 녹으면서 북극곰들이 먹이를 구하지 못해 굶주리고 있습니다. 전 세계 어린이들이 탄소 발자국 줄이기 운동에 나서고 있습니다."
+          },
+          {
+            title: "교실 불 끄기와 잔반 없애기로 북극곰에게 얼음 선물하기",
+            source: "초록학교 신문",
+            date: "2026.09.03",
+            content: "4학년 학생들이 급식 잔반을 줄이고 일회용 컵 대신 텀블러를 사용해 한 달 동안 소나무 30그루를 심은 것과 같은 탄소 절감 효과를 거두었습니다."
+          }
+        ]
       }
     };
+      data.articles.forEach((art, idx) => {
+        const artEl = document.createElement('div');
+        artEl.className = "p-3.5 bg-slate-50 hover:bg-emerald-50/50 rounded-2xl border border-slate-200 transition text-xs sm:text-sm";
+        artEl.innerHTML = `
+          <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1">
+            <span class="font-bold text-emerald-700">${art.source}</span>
+            <span>${art.date}</span>
+          </div>
+          <h5 class="font-bold text-slate-800 text-sm mb-1">${art.title}</h5>
+          <p class="text-slate-600 leading-relaxed text-xs mb-2">${art.content}</p>
+          <button type="button" onclick="citeArticleToReport('${escapeHtml(art.title)}', '${escapeHtml(art.content)}')" class="text-[11px] font-bold text-emerald-700 bg-emerald-100/80 hover:bg-emerald-200 px-2.5 py-1 rounded-lg transition inline-flex items-center gap-1">
+            <i class="fa-solid fa-quote-left"></i> 이 기사 내용 보고서에 인용하기
+          </button>
+        `;
+        newsList.appendChild(artEl);
+      });
 
-    /* ==============================================================
-       2. APP STATE & LOCAL STORAGE MANAGERS
-       ============================================================== */
-    let scenes = [];
-    const STORAGE_KEY = 'ANIMAL_WELFARE_STUDIO_V1';
+      showToast(`'${query}' 관련 기사와 AI 가이드가 업데이트되었습니다!`);
+    }
 
-    // Default sample scene if empty
-    function getDefaultScene(idNum) {
-      return {
-        id: idNum || Date.now(),
-        sceneNo: 1,
-        title: "좁은 케이지와 햇살",
-        sketchImg: "", // Base64 dataURL from Canvas
-        cameraShot: "클로즈업 (Close-up)",
-        dialogue: "나레이션: '세상의 빛을 본 적이 언제였을까...'",
-        action: "닭 '꼬꼬'가 좁은 철창 틈 사이로 비치는 가느다란 햇빛을 물끄러미 바라본다.",
-        audio: "배경음: 슬프고 잔잔한 피아노 음악 / 효과음: 철창 삐걱거리는 소리"
-      };
+    function citeArticleToReport(title, content) {
+      const impactField = document.getElementById('repImpact');
+      const citation = `[기사 인용: ${title}] ${content}`;
+      if (impactField.value.trim()) {
+        impactField.value += `\n\n${citation}`;
+      } else {
+        impactField.value = citation;
+      }
+      saveAllData(false);
+      showToast("기사 내용이 보고서 2번 항목(문제점)에 추가되었습니다!");
     }
 
     // Initialize application on load
@@ -1211,6 +1205,11 @@
       document.getElementById('outPlot3').textContent = plot3;
       document.getElementById('outPlot4').textContent = plot4;
 
+      // Update expected PDF filename preview
+      const safeFileName = getSafePdfFileName();
+      const previewEl = document.getElementById('previewPdfFileName');
+      if (previewEl) previewEl.textContent = safeFileName;
+
       // Populate Storyboard Grids
       const sbGrid = document.getElementById('outStoryboardsGrid');
       sbGrid.innerHTML = '';
@@ -1240,16 +1239,141 @@
       });
     }
 
+    function getSafePdfFileName() {
+      const rawGroup = (document.getElementById('repGroup').value || '모둠').trim();
+      const cleanGroup = rawGroup.replace(/[\\/:*?"<>|]/g, '_');
+      return `[4학년3반_${cleanGroup}]_동물복지_보고서_및_콘티.pdf`;
+    }
+
     /* ==============================================================
-       6. DATA PERSISTENCE (LocalStorage) & RESET
+       5-1. DIRECT PDF DOWNLOAD & PADLET SUBMISSION FLOW
        ============================================================== */
-    function saveAllData(showNotification = true) {
-      // Ensure all current canvas images are captured
-      scenes.forEach(sc => {
-        const c = document.getElementById(`canvas-${sc.id}`);
-        if (c) {
-          sc.sketchImg = c.toDataURL('image/png');
+    async function downloadPortfolioPDF(openPadletAfter = false) {
+      compilePortfolio();
+      saveAllData(false);
+
+      const element = document.getElementById('printArea');
+      const fileName = getSafePdfFileName();
+      const btn = document.getElementById('btnDownloadPdf');
+      const originalBtnHtml = btn.innerHTML;
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>PDF 파일 만드는 중...</span>`;
+      showToast("PDF 파일을 생성하고 있습니다. 잠시만 기다려주세요!");
+
+      const opt = {
+        margin:       [10, 10, 10, 10],
+        filename:     fileName,
+        image:        { type: 'jpeg', quality: 0.95 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:    { mode: ['css', 'legacy'], after: '.page-break' }
+      };
+
+      try {
+        if (typeof html2pdf !== 'undefined') {
+          await html2pdf().set(opt).from(element).save();
+          showToast(`'${fileName}' 저장이 완료되었습니다!`);
+        } else {
+          // Fallback if html2pdf CDN fails to load
+          window.print();
         }
+      } catch (err) {
+        console.error("PDF generation error:", err);
+        showToast("자동 PDF 변환 중 오류가 발생해 인쇄 창을 엽니다.", "warning");
+        window.print();
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalBtnHtml;
+        if (openPadletAfter) {
+          openPadletSubmissionModal();
+        }
+      }
+    }
+
+    function openPadletSubmissionModal() {
+      compilePortfolio();
+      const group = document.getElementById('repGroup').value || "4학년 3반 모둠";
+      const members = document.getElementById('repMembers').value || "모둠원";
+      const target = document.getElementById('repTarget').value || "동물 복지";
+      const movTitle = document.getElementById('movTitle').value || "단편 영화 기획";
+      const movMessage = document.getElementById('movMessage').value || "";
+
+      const postSummary = `[${group}] ${movTitle} (탐구동물: ${target})\n모둠원: ${members}\n핵심 메시지: ${movMessage}`;
+      document.getElementById('padletCopyPreview').value = postSummary;
+      document.getElementById('modalPdfName').textContent = getSafePdfFileName();
+
+      copyPadletText();
+      document.getElementById('padletModal').classList.remove('hidden');
+    }
+
+    function closePadletModal() {
+      document.getElementById('padletModal').classList.add('hidden');
+    }
+
+    function copyPadletText() {
+      const textarea = document.getElementById('padletCopyPreview');
+      textarea.select();
+      textarea.setSelectionRange(0, 99999);
+      try {
+        document.execCommand('copy');
+        showToast("패들렛에 붙여넣을 제목과 요약문이 복사되었습니다!");
+      } catch (e) {
+        console.warn("Copy failed", e);
+      }
+    }
+
+    /* ==============================================================
+       6. DATA PERSISTENCE (LocalStorage), DEMO DATA & RESET
+       ============================================================== */
+    function loadDemoData() {
+      document.getElementById('repGroup').value = "4학년 3반 1모둠 (푸른바다지킴이)";
+      document.getElementById('repMembers').value = "김민준, 이서연, 박도윤, 최지우";
+      document.getElementById('repTarget').value = "남방큰돌고래";
+      document.getElementById('repReason').value = "수족관에 갇혀 쇼를 하는 돌고래가 스트레스로 벽에 머리를 부딪힌다는 뉴스를 보고, 돌고래가 원래 살던 넓은 바다로 돌아갈 권리에 대해 조사하게 되었습니다.";
+      document.getElementById('repImpact').value = "인간들이 관람과 오락을 위해 야생 돌고래를 불법 포획해 좁은 콘크리트 수조에 가두고, 바다에는 폐그물과 플라스틱 쓰레기를 버려 돌고래의 생명을 위협하고 있습니다.";
+      document.getElementById('welfare2').checked = true;
+      document.getElementById('welfare4').checked = true;
+      document.getElementById('welfare5').checked = true;
+      document.getElementById('repWelfareNote').value = "하루에 수십 km를 헤엄치는 돌고래가 좁은 수조에 갇혀 본래의 헤엄칠 자유(4번)와 초음파 소음 공포로부터의 자유(5번)를 크게 침해받고 있습니다.";
+      document.getElementById('repSolution').value = "돌고래 쇼 관람하지 않기, 바다에 쓰레기 버리지 않기 캠페인을 벌이고 수족관 돌고래를 바다 쉼터로 돌려보내는 서명 운동에 참여하겠습니다.";
+
+      document.getElementById('movTitle').value = "파도 소리를 그리워한 제돌이";
+      document.getElementById('movGenre').value = "감동 드라마";
+      document.getElementById('movMessage').value = "돌고래의 진짜 집은 유리벽 수족관이 아니라 푸른 제주 바다입니다!";
+      document.getElementById('movCharacters').value = "제돌이(수족관 돌고래), 지우(수족관에 놀러 온 4학년 어린이), 해양구조대원";
+      document.getElementById('movPlot1').value = "넓은 제주 바다에서 가족들과 자유롭게 헤엄치던 아기 돌고래 제돌이가 그물에 걸려 잡히게 됩니다.";
+      document.getElementById('movPlot2').value = "좁은 수족관에 갇힌 제돌이는 매일 박수 소리와 조명에 시달리며 바다의 파도 소리를 그리워합니다.";
+      document.getElementById('movPlot3').value = "수족관을 찾은 초등학생 지우는 유리벽에 기대어 슬픈 눈을 한 제돌이의 마음을 느끼고 친구들과 캠페인을 시작합니다.";
+      document.getElementById('movPlot4').value = "많은 사람들의 노력으로 제돌이는 바다 쉼터에서 야생 훈련을 마치고 마침내 푸른 바다 가족 품으로 돌아갑니다.";
+
+      scenes = [
+        {
+          id: 101,
+          sceneNo: 1,
+          title: "유리벽 너머의 슬픈 눈빛",
+          sketchImg: "",
+          cameraShot: "클로즈업 (Close-up)",
+          dialogue: "지우(속마음): '어? 돌고래가 웃고 있는 게 아니라 울고 있는 것 같아...'",
+          action: "수족관 유리벽에 코를 대고 움직이지 않는 제돌이의 눈동자를 클로즈업한다.",
+          audio: "배경음: 잔잔하고 뭉클한 피아노 선율 / 효과음: 수조 물방울 소리"
+        },
+        {
+          id: 102,
+          sceneNo: 2,
+          title: "푸른 바다로의 귀향",
+          sketchImg: "",
+          cameraShot: "익스트림 롱 샷 (Extreme Long Shot)",
+          dialogue: "나레이션: '이제 너의 진짜 집, 넓은 바다에서 마음껏 헤엄쳐!'",
+          action: "가두리 그물이 열리고 제돌이가 힘차게 수면 위로 점프하며 돌고래 무리와 만난다.",
+          audio: "배경음: 희망차고 웅장한 오케스트라 / 효과음: 시원한 파도 소리와 돌고래 휘파람 소리"
+        }
+      ];
+
+      renderScenes();
+      saveAllData(false);
+      showToast("4학년 3반 예시 데이터가 채워졌습니다! 각 탭을 확인해보세요.");
+    }
       });
 
       const payload = {
@@ -1333,17 +1457,17 @@
         if (data.scenes && Array.isArray(data.scenes)) {
           scenes = data.scenes;
         }
-      } catch (err) {
-        console.warn("Could not load previous session", err);
-      }
+    function openResetModal() {
+      document.getElementById('resetModal').classList.remove('hidden');
     }
 
-    function resetAllDataConfirm() {
-      // Kid-friendly custom banner prompt instead of browser window.confirm
-      if (confirm("정말로 모든 조사 내용과 콘티를 새로 시작하시겠습니까?")) {
-        localStorage.removeItem(STORAGE_KEY);
-        location.reload();
-      }
+    function closeResetModal() {
+      document.getElementById('resetModal').classList.add('hidden');
+    }
+
+    function confirmResetAll() {
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
     }
 
     /* Helper: Toast Notification */
