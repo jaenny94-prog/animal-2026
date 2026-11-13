@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>동물 복지 탐구 & 공존 단편영화 제작 워크스튜디오</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts (Gaegu & Noto Sans KR for kid-friendly warm aesthetic) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans KR"', 'sans-serif'],
+            kids: ['"Gaegu"', 'cursive', 'sans-serif'],
+          },
+          colors: {
+            safari: {
+              50: '#f4f9f4',
+              100: '#e5f2e5',
+              200: '#cce5ce',
+              500: '#4da167',
+              600: '#3c8453',
+              800: '#235334',
+            },
+            warm: {
+              amber: '#fef3c7',
+              orange: '#ffedd5',
+              yellow: '#fef08a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Print styles for Portfolio */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printArea, #printArea * {
+        visibility: visible;
+      }
+      #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 10px;
+        background: white;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .page-break {
+        page-break-after: always;
+      }
+    }
+    .canvas-board {
+      touch-action: none;
+      background-color: #ffffff;
+      cursor: crosshair;
+    }
+  </style>
+</head>
+<body class="bg-amber-50/40 text-slate-800 min-h-screen flex flex-col font-sans selection:bg-emerald-200">
+
+  <!-- Header / Navigation -->
+  <header class="bg-white/95 backdrop-blur sticky top-0 z-40 border-b border-emerald-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap justify-between items-center gap-3">
+      <div class="flex items-center space-x-3">
+        <span class="text-3xl p-2 bg-emerald-100 rounded-2xl shadow-inner">🐾</span>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl sm:text-2xl font-black text-emerald-800 tracking-tight">공존의 렌즈 (Lens of Coexistence)</h1>
+            <span class="text-xs font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">초등 4학년 프로젝트</span>
+          </div>
+          <p class="text-xs text-slate-500 font-medium">동물 복지 탐구 보고서 & 단편 영화 스토리보드 스튜디오</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="flex items-center gap-2">
+        <button onclick="saveAllData(true)" class="px-3.5 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-sm font-bold rounded-xl border border-emerald-200 transition flex items-center gap-1.5 shadow-sm active:scale-95">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <span>임시저장</span>
+        </button>
+        <button onclick="resetAllDataConfirm()" class="px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 text-sm font-semibold rounded-xl border border-rose-200 transition active:scale-95" title="모두 비우기">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step Tabs -->
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex overflow-x-auto gap-2 py-2 border-t border-slate-100 text-sm">
+      <button onclick="switchTab(1)" id="tabBtn1" class="tab-btn active px-4 py-2 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap transition bg-emerald-600 text-white shadow-sm">
+        <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">1</span>
+        <span>동물 복지 조사 보고서</span>
+      </button>
+      <button onclick="switchTab(2)" id="tabBtn2" class="tab-btn px-4 py-2 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap transition bg-white text-slate-600 hover:bg-slate-100">
+        <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs">2</span>
+        <span>영화 기획 & 시놉시스</span>
+      </button>
+      <button onclick="switchTab(3)" id="tabBtn3" class="tab-btn px-4 py-2 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap transition bg-white text-slate-600 hover:bg-slate-100">
+        <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs">3</span>
+        <span>스토리보드(콘티) 그리기</span>
+      </button>
+      <button onclick="switchTab(4)" id="tabBtn4" class="tab-btn px-4 py-2 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap transition bg-white text-slate-600 hover:bg-slate-100">
+        <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs">4</span>
+        <span>최종 포트폴리오 & 인쇄</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition duration-300 pointer-events-none bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-sm font-semibold">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+    <span id="toastMsg">내용이 안전하게 저장되었습니다!</span>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+    <!-- ============================================== -->
+    <!-- TAB 1: 동물 복지 조사 보고서 & AI/기사 검색기 -->
+    <!-- ============================================== -->
+    <section id="step1" class="tab-content block">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left Column: 보고서 작성 폼 (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="bg-white rounded-3xl p-6 border-2 border-emerald-100 shadow-sm relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-28 h-28 bg-emerald-50 rounded-full pointer-events-none"></div>
+            
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+              <div>
+                <span class="text-xs font-black tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase">Step 01 WorkSheet</span>
+                <h2 class="text-2xl font-black text-slate-800 mt-1 flex items-center gap-2">
+                  <span>동물 복지 탐구 보고서</span>
+                  <span class="text-lg font-normal text-slate-400">📝</span>
+                </h2>
+              </div>
+              <span class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-bold flex items-center gap-1">
+                <i class="fa-solid fa-leaf text-amber-600"></i> 인간과 동물의 공존
+              </span>
+            </div>
+
+            <!-- 기본 정보 -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">우리 모둠 이름</label>
+                <input type="text" id="repGroup" placeholder="예: 4학년 2반 3모둠 (초록발자국)" class="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 focus:ring-2 focus:ring-emerald-400 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">탐구 모둠원</label>
+                <input type="text" id="repMembers" placeholder="예: 민준, 서연, 도윤, 지우" class="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 focus:ring-2 focus:ring-emerald-400 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">탐구 대상 동물</label>
+                <input type="text" id="repTarget" placeholder="예: 남방큰돌고래, 닭, 고양이, 삵" class="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 focus:ring-2 focus:ring-emerald-400 outline-none font-bold text-emerald-800">
+              </div>
+            </div>
+
+            <!-- 보고서 항목 1: 주제 및 문제 상황 -->
+            <div class="space-y-4">
+              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <label class="block font-bold text-slate-800 text-sm mb-1 flex items-center justify-between">
+                  <span>1. 조사 주제 및 탐구하게 된 계기</span>
+                  <span class="text-xs text-slate-400 font-normal">왜 이 동물에 관심을 갖게 되었나요?</span>
+                </label>
+                <textarea id="repReason" rows="3" placeholder="예: 뉴스에서 좁은 우리에 갇힌 동물원 사자의 모습을 보고 마음이 아팠습니다. 인간의 오락을 위해 동물의 자유를 빼앗는 것이 올바른지 조사해보고 싶었습니다." class="w-full text-sm rounded-xl border border-slate-200 p-3 focus:ring-2 focus:ring-emerald-400 outline-none resize-none"></textarea>
+              </div>
+
+              <!-- 보고서 항목 2: 인간 활동의 영향 및 어려움 -->
+              <div class="bg-rose-50/50 p-4 rounded-2xl border border-rose-100">
+                <label class="block font-bold text-rose-900 text-sm mb-1 flex items-center justify-between">
+                  <span>2. 인간의 행동이 이 동물에게 미치는 영향 (문제점)</span>
+                  <span class="text-xs text-rose-500 font-normal">서식지 파괴, 도로 건설, 쓰레기 등</span>
+                </label>
+                <textarea id="repImpact" rows="3" placeholder="예: 사람들이 숲을 파헤쳐 도로를 만들면서 동물들이 길을 건너다 차에 치이는 '로드킬' 사고가 자주 발생합니다. 또한 먹이가 줄어들어 마을로 내려오게 됩니다." class="w-full text-sm rounded-xl border border-rose-200 p-3 focus:ring-2 focus:ring-rose-400 outline-none resize-none"></textarea>
+              </div>
+
+              <!-- 보고서 항목 3: 세계 동물 복지의 5대 자유 점검 -->
+              <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-100">
+                <label class="block font-bold text-emerald-900 text-sm mb-2">
+                  3. 동물의 '5대 자유(복지)' 기준 점검해보기
+                  <span class="block text-xs font-normal text-emerald-700 mt-0.5">우리가 조사한 동물이 침해받고 있는 자유를 체크하고 이유를 적어보세요.</span>
+                </label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-medium text-slate-700 mb-3">
+                  <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-emerald-100 hover:bg-emerald-50 cursor-pointer">
+                    <input type="checkbox" id="welfare1" class="rounded text-emerald-600 focus:ring-emerald-400">
+                    <span>1. 배고픔과 목마름으로부터의 자유</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-emerald-100 hover:bg-emerald-50 cursor-pointer">
+                    <input type="checkbox" id="welfare2" class="rounded text-emerald-600 focus:ring-emerald-400">
+                    <span>2. 불편함(열악한 환경)으로부터의 자유</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-emerald-100 hover:bg-emerald-50 cursor-pointer">
+                    <input type="checkbox" id="welfare3" class="rounded text-emerald-600 focus:ring-emerald-400">
+                    <span>3. 통증·부상·질병으로부터의 자유</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-emerald-100 hover:bg-emerald-50 cursor-pointer">
+                    <input type="checkbox" id="welfare4" class="rounded text-emerald-600 focus:ring-emerald-400">
+                    <span>4. 정상적인 행동을 표현할 자유 (뛰어놀 권리)</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-emerald-100 hover:bg-emerald-50 cursor-pointer sm:col-span-2">
+                    <input type="checkbox" id="welfare5" class="rounded text-emerald-600 focus:ring-emerald-400">
+                    <span>5. 공포와 스트레스로부터의 자유</span>
+                  </label>
+                </div>
+                <textarea id="repWelfareNote" rows="2" placeholder="점검 소감: 예) 좁은 철창 케이지에 갇힌 닭은 날개를 펼치거나 모래 목욕을 할 수 없어 4번과 5번의 자유를 가장 크게 잃고 있었습니다." class="w-full text-sm rounded-xl border border-emerald-200 p-2.5 focus:ring-2 focus:ring-emerald-400 outline-none resize-none"></textarea>
+              </div>
+
+              <!-- 보고서 항목 4: 해결 방안 및 우리의 다짐 -->
+              <div class="bg-amber-50/60 p-4 rounded-2xl border border-amber-200">
+                <label class="block font-bold text-amber-900 text-sm mb-1 flex items-center justify-between">
+                  <span>4. 동물과 사람이 행복하게 공존하기 위한 해결 방안 및 다짐</span>
+                  <span class="text-xs text-amber-700 font-normal">법/제도 + 우리들의 작은 실천</span>
+                </label>
+                <textarea id="repSolution" rows="3" placeholder="예: 동물복지 인증 마크가 있는 달걀을 소비하고, 반려동물을 끝까지 책임져 유기동물을 줄입니다. 또한 도로에 생태통로를 더 많이 만들어야 합니다." class="w-full text-sm rounded-xl border border-amber-300 p-3 focus:ring-2 focus:ring-amber-400 outline-none resize-none"></textarea>
+              </div>
+            </div>
+
+            <div class="mt-5 flex justify-end">
+              <button onclick="saveAllData(); switchTab(2);" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-md transition flex items-center gap-2 text-sm">
+                <span>영화 기획 단계로 넘어가기</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: 어린이 AI 탐구 도우미 & 기사 검색 시뮬레이터 (5 cols) -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="bg-gradient-to-b from-emerald-800 to-teal-900 text-white p-5 rounded-3xl shadow-lg relative overflow-hidden">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-emerald-500/30 border border-emerald-400 flex items-center justify-center text-emerald-300 text-sm">
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <div>
+                  <h3 class="font-black text-emerald-100 text-base">동물 복지 어린이 뉴스 & 탐구 AI</h3>
+                  <p class="text-xs text-emerald-300">궁금한 주제를 검색하거나 버튼을 눌러보세요!</p>
+                </div>
+              </div>
+              <span class="text-xs bg-emerald-700/60 text-emerald-200 px-2.5 py-1 rounded-full font-mono">Kid-Safe</span>
+            </div>
+
+            <!-- Quick Keyword Buttons -->
+            <div class="mb-3">
+              <p class="text-xs text-emerald-200/80 mb-1.5 font-semibold">추천 탐구 키워드 (클릭해보세요!)</p>
+              <div class="flex flex-wrap gap-1.5">
+                <button onclick="quickSearch('공장식 축산')" class="text-xs bg-emerald-700/70 hover:bg-emerald-600 px-2.5 py-1 rounded-lg border border-emerald-600 transition">🍗 공장식 축산</button>
+                <button onclick="quickSearch('유기동물')" class="text-xs bg-emerald-700/70 hover:bg-emerald-600 px-2.5 py-1 rounded-lg border border-emerald-600 transition">🐶 유기동물 보호</button>
+                <button onclick="quickSearch('돌고래 수족관')" class="text-xs bg-emerald-700/70 hover:bg-emerald-600 px-2.5 py-1 rounded-lg border border-emerald-600 transition">🐬 돌고래 수족관</button>
+                <button onclick="quickSearch('로드킬 생태통로')" class="text-xs bg-emerald-700/70 hover:bg-emerald-600 px-2.5 py-1 rounded-lg border border-emerald-600 transition">🦌 로드킬과 생태통로</button>
+                <button onclick="quickSearch('동물실험')" class="text-xs bg-emerald-700/70 hover:bg-emerald-600 px-2.5 py-1 rounded-lg border border-emerald-600 transition">🐰 화장품 동물실험</button>
+                <button onclick="quickSearch('서식지 파괴')" class="text-xs bg-emerald-700/70 hover:bg-emerald-600 px-2.5 py-1 rounded-lg border border-emerald-600 transition">🌲 야생 서식지 파괴</button>
+              </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative">
+              <input type="text" id="aiSearchInput" onkeydown="if(event.key==='Enter') executeSearch()" placeholder="예: 수족관 돌고래는 왜 아플까? / 길고양이 급식소" class="w-full bg-slate-900/60 border border-emerald-500/40 rounded-xl px-4 py-2.5 pr-20 text-xs sm:text-sm text-white placeholder-emerald-200/50 focus:outline-none focus:ring-2 focus:ring-emerald-400">
+              <button onclick="executeSearch()" class="absolute right-1.5 top-1.5 bottom-1.5 px-3 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold rounded-lg text-xs transition flex items-center gap-1">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>검색</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Result Area -->
+          <div id="aiResultArea" class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm min-h-[350px] max-h-[580px] overflow-y-auto space-y-4">
+            <div id="aiDefaultNotice" class="text-center py-10 px-4 text-slate-400">
+              <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500 text-2xl">
+                <i class="fa-regular fa-newspaper"></i>
+              </div>
+              <p class="font-bold text-slate-700 mb-1">키워드를 클릭하거나 질문을 입력하세요</p>
+              <p class="text-xs leading-relaxed max-w-xs mx-auto">초등학교 4학년 눈높이에 맞춘 가상 어린이 뉴스 기사와 영화 소재로 쓸 수 있는 AI 탐구 힌트를 찾아줍니다.</p>
+            </div>
+            
+            <!-- Result Template (hidden initially) -->
+            <div id="aiCardContainer" class="hidden space-y-4">
+              <!-- AI Summary Card -->
+              <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4">
+                <div class="flex items-center gap-2 text-emerald-800 font-bold text-sm mb-2">
+                  <i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i>
+                  <span id="aiInsightTitle">AI 탐구 도우미 한 줄 브리핑</span>
+                </div>
+                <p id="aiInsightText" class="text-xs sm:text-sm text-emerald-950 leading-relaxed font-medium"></p>
+                <div class="mt-3 p-2.5 bg-white/80 rounded-xl border border-emerald-200/60 text-xs text-slate-600">
+                  <span class="font-bold text-emerald-700">🎬 영화 아이디어 힌트:</span>
+                  <span id="aiMovieHint">동물의 시선에서 인간 세상을 바라보는 장면을 넣어보면 어떨까요?</span>
+                </div>
+              </div>
+
+              <!-- News Articles -->
+              <div class="space-y-3">
+                <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <i class="fa-regular fa-newspaper text-slate-500"></i> 관련 어린이 환경·동물 뉴스 기사
+                </h4>
+                <div id="newsArticleList" class="space-y-3">
+                  <!-- Dynamic News Inserted Here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 2: 단편 영화 기획 & 시놉시스 -->
+    <!-- ============================================== -->
+    <section id="step2" class="tab-content hidden">
+      <div class="max-w-4xl mx-auto space-y-6">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-emerald-100 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-black tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase">Step 02 Movie Planning</span>
+              <h2 class="text-2xl font-black text-slate-800 mt-1 flex items-center gap-2">
+                <span>우리 모둠 단편 영화 기획서</span>
+                <span class="text-lg">🎬</span>
+              </h2>
+            </div>
+            <p class="text-xs text-slate-500">보고서 내용을 바탕으로 사람들의 마음을 움직일 감동 스토리를 짜봐요!</p>
+          </div>
+
+          <!-- Basic Movie Info -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">영화 제목 (가제)</label>
+              <input type="text" id="movTitle" placeholder="예: 달콤이의 탈출 / 로드킬 없는 숲길을 찾아서" class="w-full text-base font-bold rounded-xl border border-slate-200 px-4 py-2.5 focus:ring-2 focus:ring-emerald-400 outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">영화 장르 & 분위기</label>
+              <select id="movGenre" class="w-full text-sm rounded-xl border border-slate-200 px-4 py-2.5 focus:ring-2 focus:ring-emerald-400 outline-none bg-white">
+                <option value="감동 드라마">💖 따뜻하고 뭉클한 감동 드라마</option>
+                <option value="동물 다큐멘터리">📹 동물 관찰 탐사 다큐멘터리</option>
+                <option value="판타지/모험">✨ 동물이 말을 하는 판타지 모험극</option>
+                <option value="미스터리/추리">🔍 비밀을 파헤치는 탐정 추리극</option>
+                <option value="애니메이션">🎨 알록달록 스톱모션/애니메이션</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 핵심 메세지 & 등장인물 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">관객에게 전하고 싶은 핵심 메시지</label>
+              <textarea id="movMessage" rows="3" placeholder="예: 동물도 우리처럼 기쁨과 고통을 느끼는 소중한 생명입니다. 사지 말고 입양해주세요!" class="w-full text-sm rounded-xl border border-slate-200 p-3 focus:ring-2 focus:ring-emerald-400 outline-none resize-none"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">등장인물 & 동물 주인공 소개</label>
+              <textarea id="movCharacters" rows="3" placeholder="예: '보리'(유기견 주인공, 사람을 무서워함), '하은'(길에서 보리를 발견하고 지켜주는 초등학생), '이웃 아저씨' 등" class="w-full text-sm rounded-xl border border-slate-200 p-3 focus:ring-2 focus:ring-emerald-400 outline-none resize-none"></textarea>
+            </div>
+          </div>
+
+          <!-- 4단 구성 줄거리 (기승전결 / 발단-전개-위기-결말) -->
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 mb-6">
+            <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-clapperboard text-emerald-600"></i>
+              <span>단편 영화 스토리 4단계 구성 (발단 - 전개 - 위기/갈등 - 해결/결말)</span>
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- 1. 시작 -->
+              <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
+                <span class="inline-block text-xs font-extrabold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md mb-1.5">1단계: 시작 (발단)</span>
+                <p class="text-xs text-slate-400 mb-1.5">주인공 동물과 배경 소개</p>
+                <textarea id="movPlot1" rows="3" placeholder="예: 숲속에서 엄마와 평화롭게 살고 있던 아기 고라니 '퐁이'가 있었습니다." class="w-full text-xs sm:text-sm rounded-lg border border-slate-200 p-2.5 focus:ring-2 focus:ring-blue-400 outline-none resize-none"></textarea>
+              </div>
+
+              <!-- 2. 사건의 발생 -->
+              <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
+                <span class="inline-block text-xs font-extrabold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md mb-1.5">2단계: 사건 (전개)</span>
+                <p class="text-xs text-slate-400 mb-1.5">인간의 행동으로 인해 문제가 일어남</p>
+                <textarea id="movPlot2" rows="3" placeholder="예: 숲 한가운데에 도로가 생기고 큰 트럭들이 쌩쌩 달리면서 엄마와 헤어지게 됩니다." class="w-full text-xs sm:text-sm rounded-lg border border-slate-200 p-2.5 focus:ring-2 focus:ring-amber-400 outline-none resize-none"></textarea>
+              </div>
+
+              <!-- 3. 위기와 갈등 -->
+              <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
+                <span class="inline-block text-xs font-extrabold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md mb-1.5">3단계: 위기 (갈등)</span>
+                <p class="text-xs text-slate-400 mb-1.5">동물이 겪는 가장 큰 위험과 슬픔</p>
+                <textarea id="movPlot3" rows="3" placeholder="예: 배가 고파 도로로 뛰어든 퐁이는 자동차 헤드라이트 불빛에 얼어붙어 로드킬 위험에 처합니다." class="w-full text-xs sm:text-sm rounded-lg border border-slate-200 p-2.5 focus:ring-2 focus:ring-rose-400 outline-none resize-none"></textarea>
+              </div>
+
+              <!-- 4. 공존과 결말 -->
+              <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
+                <span class="inline-block text-xs font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md mb-1.5">4단계: 결말 (공존)</span>
+                <p class="text-xs text-slate-400 mb-1.5">인간의 반성과 공존을 위한 행동</p>
+                <textarea id="movPlot4" rows="3" placeholder="예: 마을 아이들이 표지판을 달고 어른들이 생태통로를 만들어주어 퐁이가 엄마와 다시 만나 행복하게 뛰어놉니다." class="w-full text-xs sm:text-sm rounded-lg border border-slate-200 p-2.5 focus:ring-2 focus:ring-emerald-400 outline-none resize-none"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Navigation -->
+          <div class="flex items-center justify-between pt-2">
+            <button onclick="switchTab(1)" class="px-4 py-2 text-slate-600 hover:text-slate-900 font-bold text-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>1단계 보고서로</span>
+            </button>
+            <button onclick="saveAllData(); switchTab(3);" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-md transition flex items-center gap-2 text-sm">
+              <span>스토리보드(콘티) 그리러 가기</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 3: 영화 콘티(스토리보드) 스케치북 제작기 -->
+    <!-- ============================================== -->
+    <section id="step3" class="tab-content hidden">
+      <div class="space-y-6">
+        <!-- Top Toolbar -->
+        <div class="bg-white rounded-3xl p-5 border-2 border-emerald-100 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-black tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase">Step 03 Storyboard</span>
+            <h2 class="text-2xl font-black text-slate-800 mt-1 flex items-center gap-2">
+              <span>단편 영화 스토리보드(콘티)</span>
+              <span class="text-lg">🎨</span>
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">화면을 직접 스케치하고 대사와 카메라 구도를 적어 실제 촬영 계획을 세워보세요.</p>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <button onclick="addNewScene()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-sm shadow-md transition flex items-center gap-2 active:scale-95">
+              <i class="fa-solid fa-plus"></i>
+              <span>새 장면(Scene) 추가</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Drawing Instructions Banner -->
+        <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-amber-900 text-xs sm:text-sm flex items-start gap-3">
+          <i class="fa-solid fa-lightbulb text-amber-500 text-lg mt-0.5"></i>
+          <div>
+            <span class="font-bold">스토리보드 꿀팁:</span>
+            마우스나 터치펜, 손가락으로 각 컷의 그림을 쓱쓱 그려보세요! 완벽한 그림이 아니어도 좋아요. 
+            <strong>카메라 구도</strong>(클로즈업: 얼굴 크게 / 풀샷: 전체 풍경)와 <strong>배경음악, 효과음(쾅!, 새소리 등)</strong>을 적어두면 영화 촬영할 때 큰 도움이 됩니다.
+          </div>
+        </div>
+
+        <!-- Scenes List Container -->
+        <div id="scenesContainer" class="space-y-6">
+          <!-- Dynamically Rendered Scenes -->
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="flex items-center justify-between pt-4">
+          <button onclick="switchTab(2)" class="px-4 py-2 text-slate-600 hover:text-slate-900 font-bold text-sm flex items-center gap-1.5">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>2단계 기획서로</span>
+          </button>
+          <button onclick="saveAllData(); switchTab(4);" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black shadow-md transition flex items-center gap-2 text-sm">
+            <span>최종 포트폴리오 확인 & 인쇄하기</span>
+            <i class="fa-solid fa-award"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 4: 최종 포트폴리오 & 인쇄/내보내기 -->
+    <!-- ============================================== -->
+    <section id="step4" class="tab-content hidden">
+      <div class="space-y-6">
+        <!-- Print Header & Controls -->
+        <div class="bg-white rounded-3xl p-5 border-2 border-emerald-100 shadow-sm flex flex-wrap items-center justify-between gap-4 no-print">
+          <div>
+            <span class="text-xs font-black tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase">Step 04 Final Output</span>
+            <h2 class="text-2xl font-black text-slate-800 mt-1 flex items-center gap-2">
+              <span>동물 복지 프로젝트 최종 포트폴리오</span>
+              <span class="text-lg">🏆</span>
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">우리 모둠이 작성한 조사 보고서와 영화 콘티가 하나의 멋진 작품집으로 정리되었습니다!</p>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <button onclick="window.print()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-sm shadow-md transition flex items-center gap-2 active:scale-95">
+              <i class="fa-solid fa-print"></i>
+              <span>보고서 & 콘티 인쇄하기 (PDF 저장)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Print-Ready Portfolio Sheet Area -->
+        <div id="printArea" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-md space-y-10">
+
+          <!-- 1. 표지 및 개요 -->
+          <div class="border-b-2 border-emerald-600 pb-6 text-center space-y-2">
+            <div class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-black rounded-full mb-1">
+              초등학교 동물 복지 & 공존 단편 영화 프로젝트
+            </div>
+            <h1 id="outMovTitle" class="text-3xl sm:text-4xl font-black text-slate-900">단편 영화 제목</h1>
+            <p id="outMeta" class="text-sm font-semibold text-slate-600 mt-2">
+              모둠: <span id="outGroup" class="text-emerald-700"></span> | 모둠원: <span id="outMembers" class="text-emerald-700"></span> | 탐구 동물: <span id="outTarget" class="text-emerald-700"></span>
+            </p>
+          </div>
+
+          <!-- 2. 동물 복지 탐구 보고서 요약 -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-black text-slate-800 border-l-4 border-emerald-500 pl-3 flex items-center gap-2">
+              <span>1. 동물 복지 탐구 보고서</span>
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+              <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+                <span class="font-bold text-slate-700 block">🔍 탐구 계기 및 대상</span>
+                <p id="outReason" class="text-slate-600 whitespace-pre-line"></p>
+              </div>
+              <div class="p-4 bg-rose-50/40 rounded-2xl border border-rose-200 space-y-1">
+                <span class="font-bold text-rose-800 block">⚠️ 인간 활동이 미친 영향</span>
+                <p id="outImpact" class="text-slate-600 whitespace-pre-line"></p>
+              </div>
+              <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-200 space-y-1">
+                <span class="font-bold text-emerald-800 block">🐾 점검한 동물의 5대 복지 기준</span>
+                <div id="outWelfareBadges" class="flex flex-wrap gap-1.5 py-1"></div>
+                <p id="outWelfareNote" class="text-slate-600 whitespace-pre-line"></p>
+              </div>
+              <div class="p-4 bg-amber-50/50 rounded-2xl border border-amber-200 space-y-1">
+                <span class="font-bold text-amber-800 block">🌱 공존을 위한 해결 방안 및 다짐</span>
+                <p id="outSolution" class="text-slate-600 whitespace-pre-line"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-break"></div>
+
+          <!-- 3. 영화 기획 & 줄거리 요약 -->
+          <div class="space-y-4 pt-4">
+            <h3 class="text-lg font-black text-slate-800 border-l-4 border-emerald-500 pl-3 flex items-center gap-2">
+              <span>2. 단편 영화 기획 및 줄거리</span>
+            </h3>
+
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs sm:text-sm grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <span class="font-bold text-slate-700">장르:</span> <span id="outGenre" class="text-slate-600"></span><br>
+                <span class="font-bold text-slate-700">핵심 메시지:</span> <span id="outMessage" class="text-slate-600"></span>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700">등장인물:</span> <span id="outCharacters" class="text-slate-600"></span>
+              </div>
+            </div>
+
+            <!-- Plot 4 stages -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+              <div class="p-3 bg-blue-50/60 rounded-xl border border-blue-200">
+                <span class="font-bold text-blue-800 block mb-1">1. 발단 (시작)</span>
+                <p id="outPlot1" class="text-slate-700"></p>
+              </div>
+              <div class="p-3 bg-amber-50/60 rounded-xl border border-amber-200">
+                <span class="font-bold text-amber-800 block mb-1">2. 전개 (사건)</span>
+                <p id="outPlot2" class="text-slate-700"></p>
+              </div>
+              <div class="p-3 bg-rose-50/60 rounded-xl border border-rose-200">
+                <span class="font-bold text-rose-800 block mb-1">3. 위기 (갈등)</span>
+                <p id="outPlot3" class="text-slate-700"></p>
+              </div>
+              <div class="p-3 bg-emerald-50/60 rounded-xl border border-emerald-200">
+                <span class="font-bold text-emerald-800 block mb-1">4. 결말 (공존)</span>
+                <p id="outPlot4" class="text-slate-700"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-break"></div>
+
+          <!-- 4. 영화 스토리보드 컷 모아보기 -->
+          <div class="space-y-4 pt-4">
+            <h3 class="text-lg font-black text-slate-800 border-l-4 border-emerald-500 pl-3 flex items-center gap-2">
+              <span>3. 영화 스토리보드 (콘티 목록)</span>
+            </h3>
+            
+            <div id="outStoryboardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <!-- Dynamically populated storyboards -->
+            </div>
+          </div>
+
+          <!-- Sign Footer -->
+          <div class="pt-8 border-t border-slate-200 text-center text-xs text-slate-400">
+            <p>우리는 모든 생명이 존중받고 인간과 자연이 조화롭게 살아가는 세상을 꿈꿉니다. 🐾</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-4 mt-12 no-print text-center text-xs text-slate-500">
+    <p>공존의 렌즈 — 초등학교 동물 복지 탐구 & 모둠 단편 영화 제작 학습 스튜디오</p>
+  </footer>
+
+  <!-- Application Logic -->
+  <script>
+    /* ==============================================================
+       1. VIRTUAL KID-SAFE AI & NEWS DATABASE (동물복지 맞춤형 데이터베이스)
+       ============================================================== */
+    const KNOWLEDGE_BASE = {
+      '공장식 축산': {
+        insight: "공장식 축산은 고기와 달걀을 대량으로 얻기 위해 동물들을 아주 좁고 햇볕이 들지 않는 케이지에 가두어 기르는 방식입니다. 이로 인해 동물들은 날개를 펴거나 걸어 다닐 수 없어 큰 고통을 겪습니다.",
+        hint: "달걀 케이지에 갇힌 닭이 창문 너머 따스한 햇빛과 풀밭을 동경하는 시점의 오프닝을 연출해보세요.",
+        articles: [
+          {
+            title: "A4용지 한 장 크기 케이지... 닭들의 눈물과 '동물복지 달걀'",
+            source: "어린이 지구일보",
+            date: "2026.04.18",
+            content: "대부분의 산란계(알을 낳는 닭)는 A4 용지보다 좁은 철창에 갇혀 평생 흙 한 번 밟아보지 못합니다. 최근 이를 개선하기 위해 흙에서 자유롭게 모래목욕을 할 수 있는 '동물복지 인증 달걀'을 선택하는 착한 소비가 늘고 있습니다."
+          },
+          {
+            title: "기후위기와 축산업, 고기 없는 월요일에 동참하는 학교들",
+            source: "푸른별 뉴스",
+            date: "2026.05.02",
+            content: "가축을 너무 많이 기르면서 엄청난 양의 온실가스가 발생하고 숲이 사라지고 있습니다. 학생들은 주 1회 채식 급식을 통해 지구와 동물을 동시에 지키는 캠페인을 펼치고 있습니다."
+          }
+        ]
+      },
+      '유기동물': {
+        insight: "해마다 수많은 반려동물이 휴가철이나 이사 때 버려집니다. 유기동물 보호소에 들어간 동물 중 새 가족을 만나지 못한 아이들은 안락사를 당하기도 합니다. 끝까지 책임지는 태도가 가장 중요합니다.",
+        hint: "가족에게 버려진 강아지가 골목길에서 겪는 비바람과 두려움을 실감 나는 사운드와 함께 표현해보세요.",
+        articles: [
+          {
+            title: "버려진 반려견의 슬픈 눈망울... '사지 말고 입양하세요'",
+            source: "다함께 생명뉴스",
+            date: "2026.03.11",
+            content: "귀엽다고 쉽게 샀다가 커지거나 병원비가 많이 든다는 이유로 버려지는 동물이 한 해 10만 마리에 이릅니다. 전문가들은 '반려동물은 장난감이 아닌 평생의 가족'이라며 신중한 입양과 동물등록제를 강조합니다."
+          },
+          {
+            title: "유기견에서 멋진 치료견으로 변신한 '햇살이' 이야기",
+            source: "어린이 동아일보",
+            date: "2026.02.24",
+            content: "보호소에서 구조된 유기견 햇살이가 새로운 가족의 사랑을 받고 마음의 상처를 치료하는 테라피견으로 활약하며 사람들에게 큰 감동을 주고 있습니다."
+          }
+        ]
+      },
+      '돌고래 수족관': {
+        insight: "바다에서 하루에 수십~수백 킬로미터를 자유롭게 헤엄치던 돌고래를 좁은 콘크리트 수족관에 가두면 심각한 스트레스와 우울증에 걸리게 됩니다. 돌고래의 초음파가 벽에 부딪혀 큰 소음 고통이 됩니다.",
+        hint: "수족관의 벽을 부딪치며 바다의 파도 소리를 그리워하는 돌고래의 꿈 장면을 판타지처럼 그려보세요.",
+        articles: [
+          {
+            title: "좁은 수족관 대신 푸른 바다로! 남방큰돌고래의 귀향",
+            source: "해양생태 어린이뉴스",
+            date: "2026.06.10",
+            content: "불법 포획되어 공연에 동원되었던 남방큰돌고래 '제돌이'에 이어, 마지막 남은 수족관 돌고래들을 야생 바다 쉼터(바다 생추어리)로 돌려보내는 프로젝트가 전국에서 응원을 받고 있습니다."
+          },
+          {
+            title: "외국에서는 '고래류 수족관 전시' 전면 금지 바람",
+            source: "글로벌 에코타임스",
+            date: "2026.01.15",
+            content: "캐나다와 프랑스 등 많은 나라들이 지능이 높고 사회성이 뛰어난 돌고래를 오락용으로 가두는 행위를 법으로 금지하고 있습니다. 가상현실(VR)이나 디지털 수족관이 대안으로 떠오르고 있습니다."
+          }
+        ]
+      },
+      '로드킬 생태통로': {
+        insight: "인간들이 산과 숲을 가로지르는 고속도로를 만들면서 야생동물들이 서식지를 잃고 차에 치이는 '로드킬'을 당합니다. 동물이 안전하게 다닐 수 있는 '생태통로'와 '주의 표지판'이 필수적입니다.",
+        hint: "도로 위에서 헤드라이트 불빛을 보고 멈칫하는 고라니의 눈동자 클로즈업 컷을 영화의 하이라이트로 구성해보세요.",
+        articles: [
+          {
+            title: "밤마다 도로 건너다 쿵... 야생동물 지키는 '생태통로' 더 늘린다",
+            source: "초록숲 신문",
+            date: "2026.07.20",
+            content: "고라니, 너구리, 삵 등이 길을 건너다 목숨을 잃는 로드킬이 연간 수만 건 발생하고 있습니다. 도로 위에 흙과 나무를 심어 만든 친환경 생태통로가 야생동물의 안전한 다리가 되어주고 있습니다."
+          },
+          {
+            title: "내비게이션에 '야생동물 주의' 음성... 운전자도 속도 줄여요",
+            source: "스마트 도로뉴스",
+            date: "2026.08.05",
+            content: "로드킬이 자주 일어나는 숲길 구간에서 내비게이션 안내에 맞춰 서행 운전하는 것만으로도 동물과 운전자 모두의 안전을 지킬 수 있습니다."
+          }
+        ]
+      },
+      '동물실험': {
+        insight: "우리가 쓰는 샴푸, 화장품, 약품의 독성을 테스트하기 위해 수많은 토끼, 기니피그, 쥐 등이 고통스러운 실험을 받습니다. 지금은 인공 장기나 컴퓨터 시뮬레이션 같은 훌륭한 대체 기술이 발전하고 있습니다.",
+        hint: "실험실 철창 속 토끼가 풀밭 냄새를 기억하는 회상 장면을 흑백과 컬러의 대비로 표현해볼 수 있습니다.",
+        articles: [
+          {
+            title: "토끼의 눈을 아프게 하지 마세요! '크루얼티 프리(Cruelty-Free)' 마크",
+            source: "착한소비 어린이뉴스",
+            date: "2026.03.29",
+            content: "토끼의 눈에 화학물질을 넣는 잔인한 안구 자극 실험 없이도 안전한 화장품을 만들 수 있습니다. 토끼 모양 마크가 붙은 '동물실험을 하지 않은 제품'을 선택하는 어린이가 늘고 있습니다."
+          },
+          {
+            title: "인공 피부와 3D 바이오 프린팅, 동물 없는 과학 연구의 시작",
+            source: "미래과학 어린이포커스",
+            date: "2026.09.12",
+            content: "인간 세포로 만든 3D 인공 피부 칩으로 약품을 테스트하는 기술이 개발되어 동물들의 희생을 획기적으로 줄이고 있습니다."
+          }
+        ]
+      },
+      '서식지 파괴': {
+        insight: "도시 개발, 골프장 건설, 숲 개간, 기후변화로 인해 야생동물들이 살아갈 터전을 빼앗기고 있습니다. 집을 잃은 동물들이 먹이를 찾아 도심으로 내려왔다가 위험에 빠지게 됩니다.",
+        hint: "포크레인이 숲을 밀어낼 때 둥지에서 떨어진 아기 새를 지켜주려는 아이들의 연대 모험을 구상해보세요.",
+        articles: [
+          {
+            title: "우리 집은 어디로 갔나요? 숲이 사라져 도심에 나타난 멧돼지와 너구리",
+            source: "환경탐사 보도국",
+            date: "2026.05.21",
+            content: "숲이 사라지자 먹이를 잃은 동물들이 아파트 단지와 쓰레기통을 뒤지다 사람들과 충돌하고 있습니다. 전문가들은 개발을 멈추고 생태 축을 잇는 녹지 보존이 시급하다고 말합니다."
+          },
+          {
+            title: "지구의 허파 아마존 파괴와 멸종위기 동물들의 비명",
+            source: "글로벌 자연뉴스",
+            date: "2026.08.30",
+            content: "소 방목지와 사료용 콩밭을 만들기 위해 열대우림이 불타며 재규어와 수많은 희귀 동물들이 멸종 위기에 처해 있습니다."
+          }
+        ]
+      }
+    };
+
+    /* ==============================================================
+       2. APP STATE & LOCAL STORAGE MANAGERS
+       ============================================================== */
+    let scenes = [];
+    const STORAGE_KEY = 'ANIMAL_WELFARE_STUDIO_V1';
+
+    // Default sample scene if empty
+    function getDefaultScene(idNum) {
+      return {
+        id: idNum || Date.now(),
+        sceneNo: 1,
+        title: "좁은 케이지와 햇살",
+        sketchImg: "", // Base64 dataURL from Canvas
+        cameraShot: "클로즈업 (Close-up)",
+        dialogue: "나레이션: '세상의 빛을 본 적이 언제였을까...'",
+        action: "닭 '꼬꼬'가 좁은 철창 틈 사이로 비치는 가느다란 햇빛을 물끄러미 바라본다.",
+        audio: "배경음: 슬프고 잔잔한 피아노 음악 / 효과음: 철창 삐걱거리는 소리"
+      };
+    }
+
+    // Initialize application on load
+    window.onload = function() {
+      loadSavedData();
+      if (scenes.length === 0) {
+        scenes.push(getDefaultScene(1));
+      }
+      renderScenes();
+    };
+
+    function switchTab(tabIndex) {
+      for (let i = 1; i <= 4; i++) {
+        const tabEl = document.getElementById(`step${i}`);
+        const btnEl = document.getElementById(`tabBtn${i}`);
+        if (i === tabIndex) {
+          tabEl.classList.remove('hidden');
+          tabEl.classList.add('block');
+          btnEl.className = "tab-btn active px-4 py-2 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap transition bg-emerald-600 text-white shadow-sm";
+          btnEl.querySelector('span:first-child').className = "w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs";
+        } else {
+          tabEl.classList.add('hidden');
+          tabEl.classList.remove('block');
+          btnEl.className = "tab-btn px-4 py-2 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap transition bg-white text-slate-600 hover:bg-slate-100";
+          btnEl.querySelector('span:first-child').className = "w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs";
+        }
+      }
+
+      // If switching to Step 3, re-initialize canvas components cleanly
+      if (tabIndex === 3) {
+        setTimeout(initAllCanvases, 100);
+      }
+      // If switching to Step 4, compile portfolio preview
+      if (tabIndex === 4) {
+        compilePortfolio();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ==============================================================
+       3. SEARCH & AI NEWS SIMULATOR LOGIC
+       ============================================================== */
+    function quickSearch(keyword) {
+      document.getElementById('aiSearchInput').value = keyword;
+      executeSearch();
+    }
+
+    function executeSearch() {
+      const query = document.getElementById('aiSearchInput').value.trim();
+      if (!query) {
+        showToast("검색어 또는 탐구 키워드를 입력해주세요!", "warning");
+        return;
+      }
+
+      // Search match in local DB
+      let matchedKey = null;
+      for (const key in KNOWLEDGE_BASE) {
+        if (query.includes(key) || key.includes(query)) {
+          matchedKey = key;
+          break;
+        }
+      }
+
+      // If exact keyword not matched, choose best approximation or fallback
+      let data = KNOWLEDGE_BASE[matchedKey];
+      if (!data) {
+        // Fallback generator for general animal welfare query
+        data = {
+          insight: `'${query}'(와)과 관련된 동물 복지 문제입니다. 인간의 이기심이나 무관심으로 인해 동물들이 서식지를 잃거나 5대 자유(고통, 배고픔, 자유로운 행동 등)를 침해받는 사례가 많습니다.`,
+          hint: `동물이 겪는 어려움을 보여준 뒤, 어린이가 동물과 교감하며 해결책을 찾아가는 드라마틱한 반전 장면을 만들어보세요!`,
+          articles: [
+            {
+              title: `[초록탐사] '${query}' 문제, 동물과 인간의 평화로운 공존 길을 찾다`,
+              source: "어린이 환경신문",
+              date: "2026.10.15",
+              content: `최근 환경 전문가들은 '${query}'와 관련된 문제를 해결하기 위해 법적 제도를 강화하고, 일상에서 생명을 존중하는 교육을 늘려야 한다고 강조하고 있습니다.`
+            },
+            {
+              title: `우리가 만드는 작은 변화! 학교에서 시작하는 생명 존중 프로젝트`,
+              source: "공존일보",
+              date: "2026.11.01",
+              content: `초등학교 학생들이 직접 만든 동물 복지 캠페인 영상이 지역 사회에 큰 울림을 주며 생명 보호 조례 제정으로 이어지고 있습니다.`
+            }
+          ]
+        };
+      }
+
+      // Populate UI
+      document.getElementById('aiDefaultNotice').classList.add('hidden');
+      const container = document.getElementById('aiCardContainer');
+      container.classList.remove('hidden');
+
+      document.getElementById('aiInsightTitle').textContent = `AI 탐구 도우미: "${query}" 핵심 정리`;
+      document.getElementById('aiInsightText').textContent = data.insight;
+      document.getElementById('aiMovieHint').textContent = data.hint;
+
+      const newsList = document.getElementById('newsArticleList');
+      newsList.innerHTML = '';
+
+      data.articles.forEach(art => {
+        const artEl = document.createElement('div');
+        artEl.className = "p-3.5 bg-slate-50 hover:bg-emerald-50/50 rounded-2xl border border-slate-200 transition text-xs sm:text-sm";
+        artEl.innerHTML = `
+          <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1">
+            <span class="font-bold text-emerald-700">${art.source}</span>
+            <span>${art.date}</span>
+          </div>
+          <h5 class="font-bold text-slate-800 text-sm mb-1">${art.title}</h5>
+          <p class="text-slate-600 leading-relaxed text-xs">${art.content}</p>
+        `;
+        newsList.appendChild(artEl);
+      });
+
+      showToast(`'${query}' 관련 기사와 AI 가이드가 업데이트되었습니다!`);
+    }
+
+    /* ==============================================================
+       4. STORYBOARD SCENES & CANVAS DRAWING
+       ============================================================== */
+    function renderScenes() {
+      const container = document.getElementById('scenesContainer');
+      container.innerHTML = '';
+
+      scenes.forEach((sc, index) => {
+        const sceneCard = document.createElement('div');
+        sceneCard.className = "bg-white rounded-3xl p-5 sm:p-6 border-2 border-emerald-100 shadow-sm transition hover:border-emerald-200";
+        sceneCard.id = `scene-card-${sc.id}`;
+
+        sceneCard.innerHTML = `
+          <!-- Header of Scene -->
+          <div class="flex flex-wrap items-center justify-between border-b border-slate-100 pb-3 mb-4 gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="px-3 py-1 bg-emerald-600 text-white font-black text-xs sm:text-sm rounded-xl shadow-xs">
+                Scene #${index + 1}
+              </span>
+              <input type="text" value="${escapeHtml(sc.title)}" onchange="updateSceneField(${sc.id}, 'title', this.value)" placeholder="장면 제목 (예: 케이지 탈출 작전)" class="font-bold text-slate-800 text-sm sm:text-base border-b border-transparent hover:border-slate-300 focus:border-emerald-500 outline-none px-1 py-0.5">
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <button onclick="deleteScene(${sc.id})" class="text-slate-400 hover:text-rose-500 p-2 rounded-xl hover:bg-rose-50 transition text-sm" title="이 씬 삭제">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Main Scene Body: Left Canvas Drawing / Right Text Fields -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            
+            <!-- Left: Drawing Canvas (5 cols) -->
+            <div class="lg:col-span-5 flex flex-col">
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-bold text-slate-700 flex items-center gap-1">
+                  <i class="fa-solid fa-paintbrush text-emerald-600"></i>
+                  <span>화면 스케치 (컷 그림)</span>
+                </label>
+                <div class="flex items-center gap-1.5">
+                  <!-- Color palette -->
+                  <button type="button" onclick="setCanvasColor(${sc.id}, '#1e293b')" class="w-5 h-5 rounded-full bg-slate-800 border-2 border-white shadow-xs focus:ring-2 ring-emerald-400"></button>
+                  <button type="button" onclick="setCanvasColor(${sc.id}, '#ef4444')" class="w-5 h-5 rounded-full bg-red-500 border-2 border-white shadow-xs focus:ring-2 ring-emerald-400"></button>
+                  <button type="button" onclick="setCanvasColor(${sc.id}, '#3b82f6')" class="w-5 h-5 rounded-full bg-blue-500 border-2 border-white shadow-xs focus:ring-2 ring-emerald-400"></button>
+                  <button type="button" onclick="setCanvasColor(${sc.id}, '#10b981')" class="w-5 h-5 rounded-full bg-emerald-500 border-2 border-white shadow-xs focus:ring-2 ring-emerald-400"></button>
+                  <button type="button" onclick="setCanvasEraser(${sc.id})" class="p-1 text-slate-500 hover:text-slate-800 text-xs" title="지우개">
+                    <i class="fa-solid fa-eraser"></i>
+                  </button>
+                  <button type="button" onclick="clearCanvas(${sc.id})" class="p-1 text-rose-400 hover:text-rose-600 text-xs" title="전체 지우기">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Canvas Container with 16:9 ratio -->
+              <div class="relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-slate-200 bg-white shadow-inner flex items-center justify-center">
+                <canvas id="canvas-${sc.id}" class="canvas-board w-full h-full block"></canvas>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1 text-center">💡 마우스나 터치로 화면 구도를 그려보세요.</p>
+            </div>
+
+            <!-- Right: Scene Details (7 cols) -->
+            <div class="lg:col-span-7 space-y-3">
+              
+              <!-- Camera Shot -->
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">카메라 구도 (카메라 앵글)</label>
+                <select onchange="updateSceneField(${sc.id}, 'cameraShot', this.value)" class="w-full text-xs sm:text-sm rounded-xl border border-slate-200 px-3 py-2 bg-white focus:ring-2 focus:ring-emerald-400 outline-none">
+                  <option value="클로즈업 (Close-up)" ${sc.cameraShot.includes('클로즈업') ? 'selected' : ''}>🔍 클로즈업 (Close-up) - 동물의 슬픈 눈빛, 표정 강조</option>
+                  <option value="바스트 샷 (Bust Shot)" ${sc.cameraShot.includes('바스트') ? 'selected' : ''}>👤 바스트 샷 (Bust Shot) - 인물의 상반신과 대화</option>
+                  <option value="풀 샷 (Full Shot)" ${sc.cameraShot.includes('풀 샷') ? 'selected' : ''}>🧍 풀 샷 (Full Shot) - 동물 전체 모습과 행동</option>
+                  <option value="익스트림 롱 샷 (Extreme Long Shot)" ${sc.cameraShot.includes('익스트림') ? 'selected' : ''}>🌲 익스트림 롱 샷 (Extreme Long Shot) - 숲, 도로 전체 배경</option>
+                  <option value="로우 앵글 (Low Angle)" ${sc.cameraShot.includes('로우 앵글') ? 'selected' : ''}>📐 로우 앵글 (Low Angle) - 아래에서 올려다보기 (위압적인 인간/트럭)</option>
+                  <option value="하이 앵글 / 버드아이 뷰" ${sc.cameraShot.includes('하이 앵글') ? 'selected' : ''}>🕊️ 하이 앵글 (High Angle) - 위에서 내려다보기 (작고 불쌍한 동물)</option>
+                </select>
+              </div>
+
+              <!-- Dialogue / Narration -->
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">대사 / 나레이션 (음성)</label>
+                <textarea rows="2" onchange="updateSceneField(${sc.id}, 'dialogue', this.value)" placeholder="예: '사람들은 왜 우리 숲에 무서운 기계를 가져왔을까?'" class="w-full text-xs sm:text-sm rounded-xl border border-slate-200 p-2.5 focus:ring-2 focus:ring-emerald-400 outline-none resize-none">${escapeHtml(sc.dialogue)}</textarea>
+              </div>
+
+              <!-- Action / Description -->
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">등장인물/동물의 행동 및 지문</label>
+                <textarea rows="2" onchange="updateSceneField(${sc.id}, 'action', this.value)" placeholder="예: 아기 고라니가 조심스럽게 풀숲에서 고개를 내밀고 귀를 쫑긋거린다." class="w-full text-xs sm:text-sm rounded-xl border border-slate-200 p-2.5 focus:ring-2 focus:ring-emerald-400 outline-none resize-none">${escapeHtml(sc.action)}</textarea>
+              </div>
+
+              <!-- Sound / Music Effect -->
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">음악 & 음향 효과 (BGM / SFX)</label>
+                <input type="text" value="${escapeHtml(sc.audio)}" onchange="updateSceneField(${sc.id}, 'audio', this.value)" placeholder="예: 쾅! 하는 천둥소리 / 긴장감 넘치는 바이올린 선율" class="w-full text-xs sm:text-sm rounded-xl border border-slate-200 px-3 py-2 focus:ring-2 focus:ring-emerald-400 outline-none">
+              </div>
+
+            </div>
+          </div>
+        `;
+
+        container.appendChild(sceneCard);
+      });
+
+      // Init canvas drawings
+      setTimeout(initAllCanvases, 50);
+    }
+
+    function addNewScene() {
+      const newNo = scenes.length + 1;
+      const newScene = {
+        id: Date.now(),
+        sceneNo: newNo,
+        title: `새 장면 #${newNo}`,
+        sketchImg: "",
+        cameraShot: "풀 샷 (Full Shot)",
+        dialogue: "",
+        action: "",
+        audio: ""
+      };
+      scenes.push(newScene);
+      renderScenes();
+      showToast(`새로운 Scene #${newNo}이(가) 추가되었습니다!`);
+    }
+
+    function deleteScene(id) {
+      if (scenes.length <= 1) {
+        showToast("최소 1개 이상의 장면(Scene)이 필요합니다.", "warning");
+        return;
+      }
+      scenes = scenes.filter(s => s.id !== id);
+      renderScenes();
+      showToast("장면이 삭제되었습니다.");
+    }
+
+    function updateSceneField(id, field, value) {
+      const sc = scenes.find(s => s.id === id);
+      if (sc) {
+        sc[field] = value;
+      }
+    }
+
+    /* ---------------- Canvas Interactive Logic ---------------- */
+    const canvasContexts = {}; // Stores drawing context & properties per scene
+
+    function initAllCanvases() {
+      scenes.forEach(sc => {
+        const canvas = document.getElementById(`canvas-${sc.id}`);
+        if (!canvas) return;
+
+        // Ensure canvas width matches container visually
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width || 480;
+        canvas.height = rect.height || 270;
+
+        const ctx = canvas.getContext('2d');
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#1e293b';
+
+        canvasContexts[sc.id] = {
+          ctx: ctx,
+          color: '#1e293b',
+          isDrawing: false,
+          isEraser: false
+        };
+
+        // If saved sketch exists, redraw it
+        if (sc.sketchImg) {
+          const img = new Image();
+          img.onload = function() {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          };
+          img.src = sc.sketchImg;
+        }
+
+        // Attach Mouse & Touch Listeners
+        attachCanvasEvents(canvas, sc.id);
+      });
+    }
+
+    function attachCanvasEvents(canvas, sceneId) {
+      const getPos = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: (clientX - rect.left) * (canvas.width / rect.width),
+          y: (clientY - rect.top) * (canvas.height / rect.height)
+        };
+      };
+
+      const startDrawing = (e) => {
+        e.preventDefault();
+        const state = canvasContexts[sceneId];
+        if (!state) return;
+        state.isDrawing = true;
+        const pos = getPos(e);
+        state.ctx.beginPath();
+        state.ctx.moveTo(pos.x, pos.y);
+      };
+
+      const draw = (e) => {
+        const state = canvasContexts[sceneId];
+        if (!state || !state.isDrawing) return;
+        e.preventDefault();
+        const pos = getPos(e);
+
+        if (state.isEraser) {
+          state.ctx.strokeStyle = '#ffffff';
+          state.ctx.lineWidth = 14;
+        } else {
+          state.ctx.strokeStyle = state.color;
+          state.ctx.lineWidth = 3;
+        }
+
+        state.ctx.lineTo(pos.x, pos.y);
+        state.ctx.stroke();
+      };
+
+      const stopDrawing = () => {
+        const state = canvasContexts[sceneId];
+        if (!state || !state.isDrawing) return;
+        state.isDrawing = false;
+        state.ctx.closePath();
+
+        // Save canvas image into memory & scene state
+        const sc = scenes.find(s => s.id === sceneId);
+        if (sc) {
+          sc.sketchImg = canvas.toDataURL('image/png');
+        }
+      };
+
+      canvas.onmousedown = startDrawing;
+      canvas.onmousemove = draw;
+      canvas.onmouseup = stopDrawing;
+      canvas.onmouseleave = stopDrawing;
+
+      canvas.ontouchstart = startDrawing;
+      canvas.ontouchmove = draw;
+      canvas.ontouchend = stopDrawing;
+    }
+
+    function setCanvasColor(sceneId, hexColor) {
+      if (canvasContexts[sceneId]) {
+        canvasContexts[sceneId].isEraser = false;
+        canvasContexts[sceneId].color = hexColor;
+        showToast("펜 색상이 변경되었습니다.");
+      }
+    }
+
+    function setCanvasEraser(sceneId) {
+      if (canvasContexts[sceneId]) {
+        canvasContexts[sceneId].isEraser = true;
+        showToast("지우개 모드입니다.");
+      }
+    }
+
+    function clearCanvas(sceneId) {
+      const canvas = document.getElementById(`canvas-${sceneId}`);
+      const state = canvasContexts[sceneId];
+      if (canvas && state) {
+        state.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const sc = scenes.find(s => s.id === sceneId);
+        if (sc) sc.sketchImg = "";
+        showToast("캔버스가 초기화되었습니다.");
+      }
+    }
+
+    /* ==============================================================
+       5. PORTFOLIO COMPILATION & PRINT PREVIEW
+       ============================================================== */
+    function compilePortfolio() {
+      // Step 1: Report values
+      const group = document.getElementById('repGroup').value || "(미입력)";
+      const members = document.getElementById('repMembers').value || "(미입력)";
+      const target = document.getElementById('repTarget').value || "(미입력)";
+      const reason = document.getElementById('repReason').value || "(작성된 내용이 없습니다.)";
+      const impact = document.getElementById('repImpact').value || "(작성된 내용이 없습니다.)";
+      const welfareNote = document.getElementById('repWelfareNote').value || "";
+      const solution = document.getElementById('repSolution').value || "(작성된 내용이 없습니다.)";
+
+      // 5 Freedoms checked
+      const checkedWelfares = [];
+      const labels = [
+        "1. 배고픔·목마름 자유",
+        "2. 불편함 자유",
+        "3. 고통·질병 자유",
+        "4. 자연스러운 행동 자유",
+        "5. 공포·스트레스 자유"
+      ];
+      for (let i = 1; i <= 5; i++) {
+        if (document.getElementById(`welfare${i}`).checked) {
+          checkedWelfares.push(labels[i-1]);
+        }
+      }
+
+      // Step 2: Movie values
+      const title = document.getElementById('movTitle').value || "제목 미정의 단편 영화";
+      const genre = document.getElementById('movGenre').value;
+      const message = document.getElementById('movMessage').value || "(작성된 내용이 없습니다.)";
+      const characters = document.getElementById('movCharacters').value || "(작성된 내용이 없습니다.)";
+      const plot1 = document.getElementById('movPlot1').value || "(작성 내용 없음)";
+      const plot2 = document.getElementById('movPlot2').value || "(작성 내용 없음)";
+      const plot3 = document.getElementById('movPlot3').value || "(작성 내용 없음)";
+      const plot4 = document.getElementById('movPlot4').value || "(작성 내용 없음)";
+
+      // Inject into portfolio DOM
+      document.getElementById('outMovTitle').textContent = `🎬 ${title}`;
+      document.getElementById('outGroup').textContent = group;
+      document.getElementById('outMembers').textContent = members;
+      document.getElementById('outTarget').textContent = target;
+
+      document.getElementById('outReason').textContent = reason;
+      document.getElementById('outImpact').textContent = impact;
+      document.getElementById('outWelfareNote').textContent = welfareNote;
+      document.getElementById('outSolution').textContent = solution;
+
+      const badgesContainer = document.getElementById('outWelfareBadges');
+      badgesContainer.innerHTML = '';
+      if (checkedWelfares.length === 0) {
+        badgesContainer.innerHTML = '<span class="text-slate-400 text-xs">체크된 항목 없음</span>';
+      } else {
+        checkedWelfares.forEach(w => {
+          const badge = document.createElement('span');
+          badge.className = "text-[11px] px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-md font-semibold";
+          badge.textContent = `✓ ${w}`;
+          badgesContainer.appendChild(badge);
+        });
+      }
+
+      document.getElementById('outGenre').textContent = genre;
+      document.getElementById('outMessage').textContent = message;
+      document.getElementById('outCharacters').textContent = characters;
+      document.getElementById('outPlot1').textContent = plot1;
+      document.getElementById('outPlot2').textContent = plot2;
+      document.getElementById('outPlot3').textContent = plot3;
+      document.getElementById('outPlot4').textContent = plot4;
+
+      // Populate Storyboard Grids
+      const sbGrid = document.getElementById('outStoryboardsGrid');
+      sbGrid.innerHTML = '';
+
+      scenes.forEach((sc, idx) => {
+        const item = document.createElement('div');
+        item.className = "border-2 border-slate-200 rounded-2xl p-4 bg-slate-50/50 space-y-2.5";
+
+        const imgPlaceholder = sc.sketchImg 
+          ? `<img src="${sc.sketchImg}" alt="Scene Sketch" class="w-full aspect-video object-contain bg-white rounded-xl border border-slate-200">`
+          : `<div class="w-full aspect-video flex items-center justify-center bg-white rounded-xl border border-dashed border-slate-300 text-slate-400 text-xs"><i class="fa-regular fa-image mr-1"></i> 그림 없음</div>`;
+
+        item.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-black text-xs text-white bg-emerald-700 px-2 py-0.5 rounded-lg">Scene #${idx + 1}</span>
+            <span class="font-bold text-slate-800 text-sm truncate max-w-[200px]">${escapeHtml(sc.title)}</span>
+            <span class="text-[11px] font-semibold text-slate-500">${escapeHtml(sc.cameraShot.split(' ')[0])}</span>
+          </div>
+          ${imgPlaceholder}
+          <div class="space-y-1 text-xs">
+            <p><strong class="text-slate-700">대사:</strong> <span class="text-slate-600">${escapeHtml(sc.dialogue || '-')}</span></p>
+            <p><strong class="text-slate-700">지문:</strong> <span class="text-slate-600">${escapeHtml(sc.action || '-')}</span></p>
+            <p><strong class="text-slate-700">음악/효과음:</strong> <span class="text-emerald-700">${escapeHtml(sc.audio || '-')}</span></p>
+          </div>
+        `;
+        sbGrid.appendChild(item);
+      });
+    }
+
+    /* ==============================================================
+       6. DATA PERSISTENCE (LocalStorage) & RESET
+       ============================================================== */
+    function saveAllData(showNotification = true) {
+      // Ensure all current canvas images are captured
+      scenes.forEach(sc => {
+        const c = document.getElementById(`canvas-${sc.id}`);
+        if (c) {
+          sc.sketchImg = c.toDataURL('image/png');
+        }
+      });
+
+      const payload = {
+        report: {
+          group: document.getElementById('repGroup').value,
+          members: document.getElementById('repMembers').value,
+          target: document.getElementById('repTarget').value,
+          reason: document.getElementById('repReason').value,
+          impact: document.getElementById('repImpact').value,
+          welfares: [1,2,3,4,5].map(i => document.getElementById(`welfare${i}`).checked),
+          welfareNote: document.getElementById('repWelfareNote').value,
+          solution: document.getElementById('repSolution').value
+        },
+        movie: {
+          title: document.getElementById('movTitle').value,
+          genre: document.getElementById('movGenre').value,
+          message: document.getElementById('movMessage').value,
+          characters: document.getElementById('movCharacters').value,
+          plots: [
+            document.getElementById('movPlot1').value,
+            document.getElementById('movPlot2').value,
+            document.getElementById('movPlot3').value,
+            document.getElementById('movPlot4').value
+          ]
+        },
+        scenes: scenes
+      };
+
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        if (showNotification) {
+          showToast("모든 활동 내용이 브라우저에 안전하게 저장되었습니다!");
+        }
+      } catch (e) {
+        console.error("Storage error", e);
+        if (showNotification) {
+          showToast("저장 공간이 부족할 수 있습니다 (그림이 너무 많음).", "warning");
+        }
+      }
+    }
+
+    function loadSavedData() {
+      const dataRaw = localStorage.getItem(STORAGE_KEY);
+      if (!dataRaw) return;
+
+      try {
+        const data = JSON.parse(dataRaw);
+        
+        // Restore Report
+        if (data.report) {
+          document.getElementById('repGroup').value = data.report.group || '';
+          document.getElementById('repMembers').value = data.report.members || '';
+          document.getElementById('repTarget').value = data.report.target || '';
+          document.getElementById('repReason').value = data.report.reason || '';
+          document.getElementById('repImpact').value = data.report.impact || '';
+          if (data.report.welfares) {
+            data.report.welfares.forEach((val, idx) => {
+              const chk = document.getElementById(`welfare${idx+1}`);
+              if (chk) chk.checked = val;
+            });
+          }
+          document.getElementById('repWelfareNote').value = data.report.welfareNote || '';
+          document.getElementById('repSolution').value = data.report.solution || '';
+        }
+
+        // Restore Movie Planning
+        if (data.movie) {
+          document.getElementById('movTitle').value = data.movie.title || '';
+          document.getElementById('movGenre').value = data.movie.genre || '감동 드라마';
+          document.getElementById('movMessage').value = data.movie.message || '';
+          document.getElementById('movCharacters').value = data.movie.characters || '';
+          if (data.movie.plots) {
+            document.getElementById('movPlot1').value = data.movie.plots[0] || '';
+            document.getElementById('movPlot2').value = data.movie.plots[1] || '';
+            document.getElementById('movPlot3').value = data.movie.plots[2] || '';
+            document.getElementById('movPlot4').value = data.movie.plots[3] || '';
+          }
+        }
+
+        // Restore Scenes
+        if (data.scenes && Array.isArray(data.scenes)) {
+          scenes = data.scenes;
+        }
+      } catch (err) {
+        console.warn("Could not load previous session", err);
+      }
+    }
+
+    function resetAllDataConfirm() {
+      // Kid-friendly custom banner prompt instead of browser window.confirm
+      if (confirm("정말로 모든 조사 내용과 콘티를 새로 시작하시겠습니까?")) {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+      }
+    }
+
+    /* Helper: Toast Notification */
+    let toastTimeout;
+    function showToast(message, type = "success") {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toastMsg');
+      const icon = document.getElementById('toastIcon');
+
+      msg.textContent = message;
+      if (type === "warning") {
+        icon.className = "fa-solid fa-triangle-exclamation text-amber-400";
+      } else {
+        icon.className = "fa-solid fa-circle-check text-emerald-400";
+      }
+
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 2600);
+    }
+
+    function escapeHtml(text) {
+      if (!text) return "";
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
