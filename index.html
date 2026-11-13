@@ -343,6 +343,129 @@
     </section>
 
     <!-- ============================================== -->
+    <!-- TAB 2: 단편 영화 기획 & 시놉시스 작성           -->
+    <!-- ============================================== -->
+    <section id="step2" class="tab-content hidden">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-emerald-100 shadow-sm space-y-6">
+        <div class="flex flex-wrap items-center justify-between border-b border-slate-100 pb-4 gap-3">
+          <div>
+            <span class="text-xs font-black tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase">Step 02 Movie Planning</span>
+            <h2 class="text-2xl font-black text-slate-800 mt-1 flex items-center gap-2">
+              <span>우리 모둠 단편 영화 기획서</span>
+              <span class="text-lg">🎬</span>
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">탐구한 동물 복지 문제를 사람들의 마음을 움직이는 단편 영화 이야기로 구성해보세요.</p>
+          </div>
+          <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full font-bold">
+            러닝타임 목표: 2분 ~ 5분 내외
+          </span>
+        </div>
+
+        <!-- 영화 기본 설정 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">단편 영화 제목</label>
+            <input type="text" id="movTitle" placeholder="예: 파도 소리를 그리워한 제돌이" class="w-full text-sm rounded-xl border border-slate-200 px-3.5 py-2.5 focus:ring-2 focus:ring-emerald-400 outline-none font-bold text-slate-900">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">영화 장르</label>
+            <select id="movGenre" class="w-full text-sm rounded-xl border border-slate-200 px-3.5 py-2.5 bg-white focus:ring-2 focus:ring-emerald-400 outline-none">
+              <option value="감동 드라마">감동 드라마 (마음을 울리는 이야기)</option>
+              <option value="다큐멘터리 / 뉴스">다큐멘터리 / 현장 리포트</option>
+              <option value="동화 / 판타지">동화 / 판타지 (동물이 말을 한다면?)</option>
+              <option value="캠페인 / 공익광고">캠페인 / 공익광고 (짧고 강렬한 메시지)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">등장인물 및 동물 역할</label>
+            <input type="text" id="movCharacters" placeholder="예: 돌고래(민준), 어린이 지우(서연), 구조대(도윤)" class="w-full text-sm rounded-xl border border-slate-200 px-3.5 py-2.5 focus:ring-2 focus:ring-emerald-400 outline-none">
+          </div>
+        </div>
+
+        <!-- 핵심 메시지 -->
+        <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200">
+          <label class="block text-sm font-black text-emerald-900 mb-1">💡 이 영화를 통해 친구들과 어른들에게 전하고 싶은 한 줄 핵심 메시지</label>
+          <input type="text" id="movMessage" placeholder="예: 동물은 구경거리가 아니라 우리와 함께 살아가야 할 소중한 생명입니다!" class="w-full text-sm rounded-xl border border-emerald-300 bg-white px-3.5 py-2.5 focus:ring-2 focus:ring-emerald-500 outline-none font-medium">
+        </div>
+
+        <!-- 기승전결 4단계 줄거리 -->
+        <div>
+          <h3 class="text-base font-black text-slate-800 mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-clapperboard text-emerald-600"></i>
+            <span>4단계 줄거리(시놉시스) 짜기</span>
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 bg-blue-50/50 rounded-2xl border border-blue-200 space-y-1.5">
+              <label class="font-bold text-blue-900 text-sm block">1. 발단 (평화로운 모습 또는 배경 소개)</label>
+              <textarea id="movPlot1" rows="3" placeholder="예: 넓은 바다에서 가족들과 헤엄치던 아기 돌고래가 그물에 잡히며 이야기가 시작됩니다." class="w-full text-xs sm:text-sm rounded-xl border border-blue-200 bg-white p-3 focus:ring-2 focus:ring-blue-400 outline-none resize-none"></textarea>
+            </div>
+            <div class="p-4 bg-amber-50/50 rounded-2xl border border-amber-200 space-y-1.5">
+              <label class="font-bold text-amber-900 text-sm block">2. 전개 (인간의 행동으로 겪는 어려움)</label>
+              <textarea id="movPlot2" rows="3" placeholder="예: 좁은 수족관에 갇힌 돌고래는 매일 쇼를 하며 외로움과 스트레스로 지쳐갑니다." class="w-full text-xs sm:text-sm rounded-xl border border-amber-200 bg-white p-3 focus:ring-2 focus:ring-amber-400 outline-none resize-none"></textarea>
+            </div>
+            <div class="p-4 bg-rose-50/50 rounded-2xl border border-rose-200 space-y-1.5">
+              <label class="font-bold text-rose-900 text-sm block">3. 위기 (가장 안타깝거나 결정적인 사건)</label>
+              <textarea id="movPlot3" rows="3" placeholder="예: 수족관에 놀러 온 4학년 지우가 유리벽에 머리를 대고 슬퍼하는 돌고래를 발견합니다." class="w-full text-xs sm:text-sm rounded-xl border border-rose-200 bg-white p-3 focus:ring-2 focus:ring-rose-400 outline-none resize-none"></textarea>
+            </div>
+            <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-200 space-y-1.5">
+              <label class="font-bold text-emerald-900 text-sm block">4. 결말 (해결 노력과 행복한 공존)</label>
+              <textarea id="movPlot4" rows="3" placeholder="예: 지우와 친구들의 캠페인 덕분에 돌고래는 바다 쉼터 훈련을 거쳐 넓은 바다로 돌아갑니다." class="w-full text-xs sm:text-sm rounded-xl border border-emerald-200 bg-white p-3 focus:ring-2 focus:ring-emerald-400 outline-none resize-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between pt-2">
+          <button onclick="saveAllData(); switchTab(1);" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>보고서로 돌아가기</span>
+          </button>
+          <button onclick="saveAllData(); switchTab(3);" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-md transition flex items-center gap-2 text-sm">
+            <span>스토리보드(콘티) 그리기</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 3: 스토리보드(콘티) 그리기                  -->
+    <!-- ============================================== -->
+    <section id="step3" class="tab-content hidden">
+      <div class="space-y-6">
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-emerald-100 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-black tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase">Step 03 Storyboard</span>
+            <h2 class="text-2xl font-black text-slate-800 mt-1 flex items-center gap-2">
+              <span>장면별 그림 콘티(스토리보드)</span>
+              <span class="text-lg">🎨</span>
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">촬영할 장면(Scene)을 추가하고, 카메라 구도와 대사, 화면 스케치를 완성해보세요.</p>
+          </div>
+          <button onclick="addNewScene()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-sm transition flex items-center gap-2 text-sm active:scale-95">
+            <i class="fa-solid fa-plus"></i>
+            <span>새 장면(Scene) 추가</span>
+          </button>
+        </div>
+
+        <!-- Scenes List Container -->
+        <div id="scenesContainer" class="space-y-5">
+          <!-- Rendered dynamically by renderScenes() -->
+        </div>
+
+        <div class="flex justify-between pt-2">
+          <button onclick="saveAllData(); switchTab(2);" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>영화 기획으로 돌아가기</span>
+          </button>
+          <button onclick="saveAllData(); switchTab(4);" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-md transition flex items-center gap-2 text-sm">
+            <span>최종 PDF 저장 & 패들렛 제출하기</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
     <!-- TAB 4: 최종 포트폴리오 & PDF 저장 / 4-3 패들렛 제출 -->
     <!-- ============================================== -->
     <section id="step4" class="tab-content hidden">
@@ -588,6 +711,21 @@
   <!-- Application Logic -->
   <script>
     const PADLET_URL = "https://padlet.com/jaenny94/padlet-s025esmtl5b6hwv738r4";
+    const STORAGE_KEY = "grade4_class3_animal_welfare_studio_v2";
+    let scenes = [];
+
+    function getDefaultScene(no = 1) {
+      return {
+        id: Date.now() + no,
+        sceneNo: no,
+        title: `장면 #${no} (예: 첫 등장)`,
+        sketchImg: "",
+        cameraShot: "풀 샷 (Full Shot)",
+        dialogue: "",
+        action: "",
+        audio: ""
+      };
+    }
 
     /* ==============================================================
        1. VIRTUAL KID-SAFE AI & NEWS DATABASE (동물복지 맞춤형 데이터베이스)
@@ -720,25 +858,6 @@
         ]
       }
     };
-      data.articles.forEach((art, idx) => {
-        const artEl = document.createElement('div');
-        artEl.className = "p-3.5 bg-slate-50 hover:bg-emerald-50/50 rounded-2xl border border-slate-200 transition text-xs sm:text-sm";
-        artEl.innerHTML = `
-          <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1">
-            <span class="font-bold text-emerald-700">${art.source}</span>
-            <span>${art.date}</span>
-          </div>
-          <h5 class="font-bold text-slate-800 text-sm mb-1">${art.title}</h5>
-          <p class="text-slate-600 leading-relaxed text-xs mb-2">${art.content}</p>
-          <button type="button" onclick="citeArticleToReport('${escapeHtml(art.title)}', '${escapeHtml(art.content)}')" class="text-[11px] font-bold text-emerald-700 bg-emerald-100/80 hover:bg-emerald-200 px-2.5 py-1 rounded-lg transition inline-flex items-center gap-1">
-            <i class="fa-solid fa-quote-left"></i> 이 기사 내용 보고서에 인용하기
-          </button>
-        `;
-        newsList.appendChild(artEl);
-      });
-
-      showToast(`'${query}' 관련 기사와 AI 가이드가 업데이트되었습니다!`);
-    }
 
     function citeArticleToReport(title, content) {
       const impactField = document.getElementById('repImpact');
@@ -859,7 +978,10 @@
             <span>${art.date}</span>
           </div>
           <h5 class="font-bold text-slate-800 text-sm mb-1">${art.title}</h5>
-          <p class="text-slate-600 leading-relaxed text-xs">${art.content}</p>
+          <p class="text-slate-600 leading-relaxed text-xs mb-2">${art.content}</p>
+          <button type="button" onclick="citeArticleToReport('${escapeHtml(art.title)}', '${escapeHtml(art.content)}')" class="text-[11px] font-bold text-emerald-700 bg-emerald-100/80 hover:bg-emerald-200 px-2.5 py-1 rounded-lg transition inline-flex items-center gap-1">
+            <i class="fa-solid fa-quote-left"></i> 이 기사 내용 보고서에 인용하기
+          </button>
         `;
         newsList.appendChild(artEl);
       });
@@ -1374,6 +1496,18 @@
       saveAllData(false);
       showToast("4학년 3반 예시 데이터가 채워졌습니다! 각 탭을 확인해보세요.");
     }
+
+    function saveAllData(showNotification = true) {
+      // Sync current canvas images before saving
+      scenes.forEach(sc => {
+        const canvas = document.getElementById(`canvas-${sc.id}`);
+        if (canvas && canvas.width > 0) {
+          try {
+            sc.sketchImg = canvas.toDataURL('image/png');
+          } catch (e) {
+            // ignore tainted or uninitialized canvas
+          }
+        }
       });
 
       const payload = {
@@ -1457,6 +1591,11 @@
         if (data.scenes && Array.isArray(data.scenes)) {
           scenes = data.scenes;
         }
+      } catch (e) {
+        console.error("Failed to parse saved data:", e);
+      }
+    }
+
     function openResetModal() {
       document.getElementById('resetModal').classList.remove('hidden');
     }
